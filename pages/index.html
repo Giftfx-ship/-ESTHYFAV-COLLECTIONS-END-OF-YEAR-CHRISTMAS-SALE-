@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DEVHUB | Ultimate Platform</title>
+    <title>DEVHUB - Ultimate Digital Hub</title>
+    
+    <!-- ADSTERRA POPUNDER -->
+    <script src="https://pl29464105.effectivecpmnetwork.com/1b/a8/38/1ba838ed76bc22378f33cccb731d8356.js"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -23,70 +27,39 @@
             top: 0;
             z-index: 100;
         }
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #6366f1, #ec4899);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .logo { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .logo small { font-size: 0.8rem; color: #94a3b8; }
-        .nav-links { display: flex; gap: 2rem; align-items: center; }
-        .nav-links a { color: #94a3b8; text-decoration: none; transition: all 0.3s; }
+        .nav-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+        .nav-links a { color: #94a3b8; text-decoration: none; transition: all 0.3s; font-size: 0.9rem; }
         .nav-links a:hover { color: #6366f1; }
         .btn {
-            padding: 0.6rem 1.5rem;
-            border-radius: 12px;
+            padding: 0.5rem 1.2rem;
+            border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
             border: none;
+            font-size: 0.9rem;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #6366f1, #4f46e5);
-            color: white;
-        }
-        .btn-outline {
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #fff;
-        }
-        .container { max-width: 1400px; margin: 0 auto; padding: 4rem 2rem; }
-        .hero { text-align: center; margin-bottom: 4rem; }
-        .hero h1 {
-            font-size: 4rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #fff, #6366f1, #ec4899);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .hero p { color: #94a3b8; margin-top: 1rem; font-size: 1.2rem; }
-        .section-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin: 3rem 0 2rem;
-            text-align: center;
-        }
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-        }
+        .btn-primary { background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; }
+        .btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: #fff; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        .hero { text-align: center; padding: 3rem 0; }
+        .hero h1 { font-size: 3rem; font-weight: 800; background: linear-gradient(135deg, #fff, #6366f1, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .hero p { color: #94a3b8; margin-top: 1rem; }
+        .stats { display: flex; justify-content: center; gap: 2rem; margin: 2rem 0; flex-wrap: wrap; }
+        .stat-card { background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 20px; text-align: center; min-width: 120px; }
+        .stat-number { font-size: 2rem; font-weight: 800; color: #6366f1; }
+        .section-title { font-size: 1.5rem; margin: 2.5rem 0 1.5rem; display: flex; align-items: center; gap: 1rem; }
+        .section-title i { color: #6366f1; }
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; }
         .tool-card {
             background: rgba(255,255,255,0.05);
             backdrop-filter: blur(10px);
-            border-radius: 24px;
+            border-radius: 16px;
             border: 1px solid rgba(255,255,255,0.1);
-            padding: 2rem;
+            padding: 1.5rem;
             text-align: center;
             transition: all 0.3s;
             cursor: pointer;
@@ -94,17 +67,10 @@
             color: white;
             display: block;
         }
-        .tool-card:hover {
-            transform: translateY(-5px);
-            border-color: #6366f1;
-            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
-        }
-        .tool-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        .tool-card h3 { margin-bottom: 0.5rem; }
-        .tool-card p { color: #94a3b8; font-size: 0.9rem; }
+        .tool-card:hover { transform: translateY(-5px); border-color: #6366f1; }
+        .tool-icon { font-size: 2rem; margin-bottom: 0.8rem; }
+        .tool-card h3 { margin-bottom: 0.3rem; font-size: 1rem; }
+        .tool-card p { color: #94a3b8; font-size: 0.75rem; }
         .footer {
             background: rgba(255,255,255,0.05);
             border-top: 1px solid rgba(255,255,255,0.1);
@@ -126,9 +92,12 @@
             <div class="logo">DEVHUB <small>by Dev Gift</small></div>
             <div class="nav-links">
                 <a href="/">Home</a>
-                <a href="/football.html">Football</a>
-                <a href="/temp-numbers.html">Temp Numbers</a>
-                <a href="/dashboard.html">Dashboard</a>
+                <a href="/football.html">⚽ Football</a>
+                <a href="/media.html">📥 Downloader</a>
+                <a href="/tools.html">🛠️ Tools</a>
+                <a href="/fun.html">😂 Fun</a>
+                <a href="/temp-numbers.html">📞 Temp</a>
+                
             </div>
             <div id="authButtons">
                 <button class="btn btn-outline" onclick="window.location.href='/login.html'">Login</button>
@@ -143,61 +112,59 @@
 
     <div class="container">
         <div class="hero">
-            <h1>Ultimate Digital Toolbox</h1>
-            <p>Live Football Streaming • Media Downloader • Temp Numbers • QR Codes • URL Shortener</p>
+            <h1>Ultimate Digital Hub</h1>
+            <p>Live Football • Media Downloader • Tools • Entertainment • Temp Numbers</p>
         </div>
 
-        <h2 class="section-title"><i class="fas fa-futbol"></i> Football Hub</h2>
-        <div class="tools-grid">
-            <a href="/football.html" class="tool-card">
-                <div class="tool-icon"><i class="fas fa-futbol"></i></div>
-                <h3>Live Football Streaming</h3>
-                <p>Watch live matches, get scores, standings, and predictions</p>
-            </a>
+        <div class="stats">
+            <div class="stat-card"><div class="stat-number">20+</div><div>useful tools also</div></div>
+            <div class="stat-card"><div class="stat-number" id="usersCount">53</div><div>Users</div></div>
+            <div class="stat-card"><div class="stat-number">24/7</div><div>Live</div></div>
         </div>
 
-        <h2 class="section-title"><i class="fas fa-download"></i> Media Downloader</h2>
+        <div class="section-title"><i class="fas fa-futbol"></i><h2>⚽ Live Football</h2></div>
         <div class="tools-grid">
-            <a href="/youtube.html" class="tool-card">
-                <div class="tool-icon"><i class="fab fa-youtube" style="color:#ff0000;"></i></div>
-                <h3>YouTube Downloader</h3>
-                <p>Download videos as MP4 or MP3</p>
-            </a>
-            <a href="/instagram.html" class="tool-card">
-                <div class="tool-icon"><i class="fab fa-instagram" style="color:#e4405f;"></i></div>
-                <h3>Instagram Downloader</h3>
-                <p>Download reels, videos, and photos</p>
-            </a>
-            <a href="/tiktok.html" class="tool-card">
-                <div class="tool-icon"><i class="fab fa-tiktok"></i></div>
-                <h3>TikTok Downloader</h3>
-                <p>Download TikTok videos no watermark</p>
-            </a>
+            <a href="/football.html" class="tool-card"><div class="tool-icon"><i class="fas fa-tv"></i></div><h3>Live Streaming</h3><p>Watch matches live</p></a>
+            <a href="/football.html?tab=scores" class="tool-card"><div class="tool-icon"><i class="fas fa-chart-line"></i></div><h3>Live Scores</h3><p>Real-time updates</p></a>
+            <a href="/football.html?tab=standings" class="tool-card"><div class="tool-icon"><i class="fas fa-trophy"></i></div><h3>Standings</h3><p>League tables</p></a>
+            <a href="/football.html?tab=predictions" class="tool-card"><div class="tool-icon"><i class="fas fa-chart-simple"></i></div><h3>Predictions</h3><p>Match tips</p></a>
         </div>
 
-        <h2 class="section-title"><i class="fas fa-tools"></i> Utilities</h2>
+        <div class="section-title"><i class="fas fa-download"></i><h2>📥 Media Downloader</h2></div>
         <div class="tools-grid">
-            <a href="/qr.html" class="tool-card">
-                <div class="tool-icon"><i class="fas fa-qrcode" style="color:#6366f1;"></i></div>
-                <h3>QR Code Generator</h3>
-                <p>Generate QR codes for any text or URL</p>
-            </a>
-            <a href="/shorten.html" class="tool-card">
-                <div class="tool-icon"><i class="fas fa-link" style="color:#10b981;"></i></div>
-                <h3>URL Shortener</h3>
-                <p>Shorten long URLs instantly</p>
-            </a>
-            <a href="/temp-numbers.html" class="tool-card">
-                <div class="tool-icon"><i class="fas fa-phone-alt" style="color:#f59e0b;"></i></div>
-                <h3>Temporary Numbers</h3>
-                <p>Get virtual numbers and receive SMS</p>
-            </a>
+            <a href="/media.html?tab=youtube" class="tool-card"><div class="tool-icon"><i class="fab fa-youtube" style="color:#ff0000;"></i></div><h3>YouTube</h3><p>MP4 / MP3</p></a>
+            <a href="/media.html?tab=instagram" class="tool-card"><div class="tool-icon"><i class="fab fa-instagram" style="color:#e4405f;"></i></div><h3>Instagram</h3><p>Reels & videos</p></a>
+            <a href="/media.html?tab=tiktok" class="tool-card"><div class="tool-icon"><i class="fab fa-tiktok"></i></div><h3>TikTok</h3><p>No watermark</p></a>
+            <a href="/media.html?tab=spotify" class="tool-card"><div class="tool-icon"><i class="fab fa-spotify" style="color:#1DB954;"></i></div><h3>Spotify</h3><p>Download music</p></a>
+        </div>
+
+        <div class="section-title"><i class="fas fa-tools"></i><h2>🛠️ Utility Tools</h2></div>
+        <div class="tools-grid">
+            <a href="/tools.html?tab=qr" class="tool-card"><div class="tool-icon"><i class="fas fa-qrcode"></i></div><h3>QR Code</h3><p>Generate & scan</p></a>
+            <a href="/tools.html?tab=shorten" class="tool-card"><div class="tool-icon"><i class="fas fa-link"></i></div><h3>URL Shortener</h3><p>Short links</p></a>
+            <a href="/tools.html?tab=removebg" class="tool-card"><div class="tool-icon"><i class="fas fa-image"></i></div><h3>Remove BG</h3><p>Background remover</p></a>
+            <a href="/tools.html?tab=screenshot" class="tool-card"><div class="tool-icon"><i class="fas fa-camera"></i></div><h3>Screenshot</h3><p>Capture websites</p></a>
+            <a href="/tools.html?tab=whois" class="tool-card"><div class="tool-icon"><i class="fas fa-globe"></i></div><h3>Whois</h3><p>Domain lookup</p></a>
+            <a href="/tools.html?tab=base64" class="tool-card"><div class="tool-icon"><i class="fas fa-code"></i></div><h3>Base64</h3><p>Encode/Decode</p></a>
+        </div>
+
+        <div class="section-title"><i class="fas fa-smile"></i><h2>😂 Entertainment</h2></div>
+        <div class="tools-grid">
+            <a href="/fun.html?tab=joke" class="tool-card"><div class="tool-icon"><i class="fas fa-laugh"></i></div><h3>Jokes</h3><p>Random jokes</p></a>
+            <a href="/fun.html?tab=love" class="tool-card"><div class="tool-icon"><i class="fas fa-heart" style="color:#ec4899;"></i></div><h3>Love</h3><p>Romantic messages</p></a>
+            <a href="/fun.html?tab=quote" class="tool-card"><div class="tool-icon"><i class="fas fa-quote-right"></i></div><h3>Quotes</h3><p>Motivation</p></a>
+            <a href="/fun.html?tab=advice" class="tool-card"><div class="tool-icon"><i class="fas fa-lightbulb"></i></div><h3>Advice</h3><p>Daily advice</p></a>
+        </div>
+
+        <div class="section-title"><i class="fas fa-phone-alt"></i><h2>📞 Temp Numbers</h2></div>
+        <div class="tools-grid">
+            <a href="/temp-numbers.html" class="tool-card"><div class="tool-icon"><i class="fas fa-mobile-alt"></i></div><h3>Virtual Numbers</h3><p>Receive SMS</p></a>
         </div>
     </div>
 
     <footer class="footer">
         <p>Made with <i class="fas fa-heart" style="color:#ec4899;"></i> by <strong>Dev Gift</strong> | +2349164624021</p>
-        <p style="margin-top: 0.5rem;">© 2026 DEVHUB - All rights reserved</p>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem;">© 2026 DEVHUB - All rights reserved</p>
     </footer>
 
     <script>
@@ -209,7 +176,14 @@
                 .then(res => res.json())
                 .then(user => {
                     if (user.username) document.getElementById('usernameDisplay').innerHTML = `<i class="fas fa-user"></i> ${user.username}`;
+                    if (user.role === 'admin') document.getElementById('adminLink').style.display = 'inline';
                 }).catch(() => {});
+            fetch('/api/admin/stats', { headers: { 'Authorization': `Bearer ${token}` } })
+                .then(res => res.json())
+                .then(stats => { if (stats.totalUsers) document.getElementById('usersCount').innerText = stats.totalUsers; })
+                .catch(() => {});
+        } else {
+            document.getElementById('usersCount').innerText = '0';
         }
         function logout() { localStorage.removeItem('token'); window.location.reload(); }
     </script>
