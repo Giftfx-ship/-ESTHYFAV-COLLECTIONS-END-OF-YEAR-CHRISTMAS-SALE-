@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entertainment - DEVHUB</title>
+    
+    <!-- ADSTERRA POPUNDER -->
+    <script src="https://pl29464105.effectivecpmnetwork.com/1b/a8/38/1ba838ed76bc22378f33cccb731d8356.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: rgba(5,5,8,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .back-btn { color: #94a3b8; text-decoration: none; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        .tabs { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; justify-content: center; }
+        .tab-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #94a3b8;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            border-radius: 50px;
+        }
+        .tab-btn.active { background: linear-gradient(135deg, #6366f1, #ec4899); color: white; }
+        .content-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 32px;
+            padding: 3rem;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .emoji { font-size: 4rem; margin-bottom: 1rem; }
+        .message {
+            font-size: 1.8rem;
+            line-height: 1.4;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+        .btn-primary { background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 25px -5px rgba(99,102,241,0.4); }
+        .loader { width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1); border-top-color: #6366f1; border-radius: 50%; animation: spin 1s linear infinite; margin: 1rem auto; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .footer { background: rgba(255,255,255,0.05); border-top: 1px solid rgba(255,255,255,0.1); padding: 2rem; text-align: center; margin-top: 4rem; }
+        @media (max-width: 768px) { .message { font-size: 1.2rem; } .content-card { padding: 2rem; } .tabs { gap: 0.5rem; } .tab-btn { padding: 0.5rem 1rem; font-size: 0.8rem; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+            <div class="logo">😂 Entertainment Hub</div>
+            <div id="authStatus"></div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('joke')">😂 Jokes</button>
+            <button class="tab-btn" onclick="switchTab('advice')">💡 Advice</button>
+            <button class="tab-btn" onclick="switchTab('love')">💕 Love</button>
+            <button class="tab-btn" onclick="switchTab('quote')">📝 Quotes</button>
+            <button class="tab-btn" onclick="switchTab('motivation')">💪 Motivation</button>
+            <button class="tab-btn" onclick="switchTab('friendship')">👫 Friendship</button>
+            <button class="tab-btn" onclick="switchTab('goodnight')">🌙 Goodnight</button>
+        </div>
+
+        <div id="jokeTab" class="content-card">
+            <div class="emoji">😂</div>
+            <div class="message" id="jokeMessage">Click the button for a random joke!</div>
+            <button class="btn btn-primary" onclick="fetchJoke()"><i class="fas fa-laugh"></i> Tell me a Joke</button>
+        </div>
+
+        <div id="adviceTab" class="content-card" style="display: none;">
+            <div class="emoji">💡</div>
+            <div class="message" id="adviceMessage">Click for daily advice</div>
+            <button class="btn btn-primary" onclick="fetchAdvice()"><i class="fas fa-lightbulb"></i> Get Advice</button>
+        </div>
+
+        <div id="loveTab" class="content-card" style="display: none;">
+            <div class="emoji">💕</div>
+            <div class="message" id="loveMessage">Click for love message</div>
+            <button class="btn btn-primary" onclick="fetchLove()"><i class="fas fa-heart"></i> Love Message</button>
+        </div>
+
+        <div id="quoteTab" class="content-card" style="display: none;">
+            <div class="emoji">📝</div>
+            <div class="message" id="quoteMessage">Click for inspiration</div>
+            <button class="btn btn-primary" onclick="fetchQuote()"><i class="fas fa-quote-right"></i> Get Quote</button>
+        </div>
+
+        <div id="motivationTab" class="content-card" style="display: none;">
+            <div class="emoji">💪</div>
+            <div class="message" id="motivationMessage">Get motivated!</div>
+            <button class="btn btn-primary" onclick="fetchMotivation()"><i class="fas fa-rocket"></i> Get Motivated</button>
+        </div>
+
+        <div id="friendshipTab" class="content-card" style="display: none;">
+            <div class="emoji">👫</div>
+            <div class="message" id="friendshipMessage">Celebrate friendship!</div>
+            <button class="btn btn-primary" onclick="fetchFriendship()"><i class="fas fa-user-friends"></i> Friendship Quote</button>
+        </div>
+
+        <div id="goodnightTab" class="content-card" style="display: none;">
+            <div class="emoji">🌙</div>
+            <div class="message" id="goodnightMessage">Sweet dreams!</div>
+            <button class="btn btn-primary" onclick="fetchGoodnight()"><i class="fas fa-moon"></i> Goodnight Wish</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>Made with <i class="fas fa-heart" style="color:#ec4899;"></i> by <strong>Dev Gift</strong> | +2349164624021</p>
+    </footer>
+
+    <script>
+        const token = localStorage.getItem('token');
+        if (token) {
+            document.getElementById('authStatus').innerHTML = '<span style="color:#10b981;"><i class="fas fa-check-circle"></i> Logged in</span>';
+        } else {
+            document.getElementById('authStatus').innerHTML = '<a href="/login.html" style="color:#6366f1;">Login</a>';
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('[id$="Tab"]').forEach(tabDiv => tabDiv.style.display = 'none');
+            
+            document.getElementById(`${tab}Tab`).style.display = 'block';
+            event.target.classList.add('active');
+        }
+
+        async function fetchJoke() {
+            const msgDiv = document.getElementById('jokeMessage');
+            msgDiv.innerHTML = '<div class="loader"></div>';
+            try {
+                const res = await fetch('/api/fun/joke');
+                const data = await res.json();
+                msgDiv.innerHTML = data.joke || data.result || data.message || "Why don't scientists trust atoms? Because they make up everything!";
+            } catch(e) { msgDiv.innerHTML = "Why did the scarecrow win an award? He was outstanding in his field!"; }
+        }
+
+        async function fetchAdvice() {
+            const msgDiv = document.getElementById('adviceMessage');
+            msgDiv.innerHTML = '<div class="loader"></div>';
+            try {
+                const res = await fetch('/api/fun/advice');
+                const data = await res.json();
+                msgDiv.innerHTML = data.advice || data.result || data.message || "Believe in yourself and all that you are.";
+            } catch(e) { msgDiv.innerHTML = "Don't watch the clock; do what it does. Keep going."; }
+        }
+
+        async function fetchLove() {
+            const msgDiv = document.getElementById('loveMessage');
+            msgDiv.innerHTML = '<div class="loader"></div>';
+            try {
+                const res = await fetch('/api/fun/love');
+                const data = await res.json();
+                msgDiv.innerHTML = data.message || data.love || data.result || "You are my sunshine on a rainy day.";
+            } catch(e) { msgDiv.innerHTML = "Every love story is beautiful, but ours is my favorite."; }
+        }
+
+        async function fetchQuote() {
+            const msgDiv = document.getElementById('quoteMessage');
+            msgDiv.innerHTML = '<div class="loader"></div>';
+            try {
+                const res = await fetch('/api/fun/quote');
+                const data = await res.json();
+                msgDiv.innerHTML = data.quote || data.result || data.message || "The only limit is your mind.";
+            } catch(e) { msgDiv.innerHTML = "Success is not final, failure is not fatal."; }
+        }
+
+        async function fetchMotivation() {
+            const msgDiv = document.getElementById('motivationMessage');
+            msgDiv.innerHTML = '<div class="loader"></div>';
+            try {
+                const res = await fetch('/api/fun/motivation');
+                const data = await res.json();
+                msgDiv.innerHTML = data.motivation || data.quote || data.result || "You are capable of amazing things!";
+            } catch(e) { msgDiv.innerHTML = "Don't stop when you're tired. Stop when you're done!"; }
+        }
+
+        async function fetchFriendship() {
+            const msgDiv = document.getElementById('friendshipMessage');
+            msgDiv.innerHTML = '<div class="loader"></div>';
+            try {
+                const res = await fetch('/api/fun/friendship');
+                const data = await res.json();
+                msgDiv.innerHTML = data.friendship || data.quote || data.result || "A true friend is the greatest gift.";
+            } catch(e) { msgDiv.innerHTML = "Friends are the family we choose for ourselves."; }
+        }
+
+        async function fetchGoodnight() {
+            const msgDiv = document.getElementById('goodnightMessage');
+            msgDiv.innerHTML = '<div class="loader"></div>';
+            try {
+                const res = await fetch('/api/fun/goodnight');
+                const data = await res.json();
+                msgDiv.innerHTML = data.goodnight || data.message || data.result || "May your dreams be as sweet as you are.";
+            } catch(e) { msgDiv.innerHTML = "Goodnight! Sleep tight, don't let the bed bugs bite!"; }
+        }
+
+        // Load default joke on page load
+        fetchJoke();
+    </script>
+</body>
+</html>
