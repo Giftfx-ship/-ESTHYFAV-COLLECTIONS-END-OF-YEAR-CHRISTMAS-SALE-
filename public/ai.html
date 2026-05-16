@@ -137,4 +137,211 @@
         }
         .message.assistant .bubble {
             background: var(--ai-msg);
-            border-radius:
+            border-radius: 20px 20px 20px 4px;
+        }
+        .bubble {
+            max-width: 70%;
+            padding: 1rem;
+            border-radius: 20px;
+        }
+        .avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+        }
+        
+        /* Chat Input */
+        .chat-input {
+            padding: 1rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 1rem;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+        .chat-input input:focus { outline: none; border-color: var(--primary); }
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            background: var(--primary);
+            color: white;
+            transition: all 0.3s;
+        }
+        .btn:hover { transform: translateY(-2px); opacity: 0.9; }
+        
+        /* Typing Animation */
+        .typing { display: flex; gap: 0.3rem; padding: 1rem; }
+        .typing span {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+        .typing span:nth-child(1) { animation-delay: -0.32s; }
+        .typing span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+        
+        .footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .bubble { max-width: 85%; }
+            .message { gap: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+            <div class="logo">🤖 AI Assistant</div>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <div class="theme-toggle" id="themeToggle">
+                    <span class="dark active" onclick="setTheme('dark')"><i class="fas fa-moon"></i></span>
+                    <span class="light" onclick="setTheme('light')"><i class="fas fa-sun"></i></span>
+                </div>
+                <div id="authStatus"></div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message assistant">
+                    <div class="avatar"><i class="fas fa-robot"></i></div>
+                    <div class="bubble">Hello! I'm your AI assistant powered by DeepSeek-V3. Ask me anything! 💬</div>
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="messageInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter') sendMessage()">
+                <button class="btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i> Send</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>Made with <i class="fas fa-heart" style="color:#ec4899;"></i> by <strong>Dev Gift</strong> | +2349164624021</p>
+    </footer>
+
+    <script>
+        const token = localStorage.getItem('token');
+        let isLoading = false;
+        
+        // Theme management
+        function setTheme(theme) {
+            document.body.className = theme;
+            localStorage.setItem('theme', theme);
+            document.querySelectorAll('.theme-toggle span').forEach(span => {
+                span.classList.remove('active');
+                if ((theme === 'dark' && span.classList.contains('dark')) ||
+                    (theme === 'light' && span.classList.contains('light'))) {
+                    span.classList.add('active');
+                }
+            });
+            // Save to server
+            if (token) {
+                fetch('/api/profile', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ theme })
+                }).catch(e => console.log);
+            }
+        }
+        
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        setTheme(savedTheme);
+        
+        // Auth check
+        if (!token) {
+            document.getElementById('authStatus').innerHTML = '<a href="/login.html" style="color:#6366f1;">Login to use AI</a>';
+            document.getElementById('messageInput').disabled = true;
+        } else {
+            document.getElementById('authStatus').innerHTML = '<span style="color:#10b981;"><i class="fas fa-check-circle"></i> Ready</span>';
+            loadHistory();
+        }
+        
+        async function loadHistory() {
+            try {
+                const res = await fetch('/api/ai/history', { headers: { 'Authorization': `Bearer ${token}` } });
+                const history = await res.json();
+                if (history && history.length) {
+                    const messagesDiv = document.getElementById('chatMessages');
+                    messagesDiv.innerHTML = history.map(h => `
+                        <div class="message user"><div class="bubble">${escapeHtml(h.message)}</div><div class="avatar"><i class="fas fa-user"></i></div></div>
+                        <div class="message assistant"><div class="avatar"><i class="fas fa-robot"></i></div><div class="bubble">${escapeHtml(h.response)}</div></div>
+                    `).join('');
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                }
+            } catch(e) {}
+        }
+        
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            if (!message || isLoading) return;
+            
+            input.value = '';
+            isLoading = true;
+            
+            const messagesDiv = document.getElementById('chatMessages');
+            messagesDiv.innerHTML += `<div class="message user"><div class="bubble">${escapeHtml(message)}</div><div class="avatar"><i class="fas fa-user"></i></div></div>`;
+            
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message assistant';
+            typingDiv.innerHTML = `<div class="avatar"><i class="fas fa-robot"></i></div><div class="typing"><span></span><span></span><span></span></div>`;
+            messagesDiv.appendChild(typingDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            try {
+                const res = await fetch('/api/ai/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ message })
+                });
+                const data = await res.json();
+                typingDiv.remove();
+                const responseText = data.response || "Thanks for your message! How can I help you further?";
+                messagesDiv.innerHTML += `<div class="message assistant"><div class="avatar"><i class="fas fa-robot"></i></div><div class="bubble">${escapeHtml(responseText)}</div></div>`;
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            } catch(e) {
+                typingDiv.remove();
+                messagesDiv.innerHTML += `<div class="message assistant"><div class="avatar"><i class="fas fa-robot"></i></div><div class="bubble">I'm here to help! What would you like to know?</div></div>`;
+            }
+            isLoading = false;
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
