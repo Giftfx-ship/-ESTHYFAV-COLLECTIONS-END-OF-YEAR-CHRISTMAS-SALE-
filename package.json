@@ -1,7 +1,7 @@
 {
   "name": "devhub",
   "version": "1.0.0",
-  "description": "Ultimate Platform - Live Football, Temp Numbers, AI, File Upload",
+  "description": "Ultimate Platform - Live Football, AI, Temp Numbers, Tools",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
