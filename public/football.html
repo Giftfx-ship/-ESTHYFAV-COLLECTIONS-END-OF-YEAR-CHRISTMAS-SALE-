@@ -5,59 +5,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Football - DEVHUB</title>
     
-    <!-- ADSTERRA POPUNDER -->
-    <script src="https://pl29464105.effectivecpmnetwork.com/1b/a8/38/1ba838ed76bc22378f33cccb731d8356.js"></script>
+    <script>
+        (function() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                fetch('/api/me', { headers: { 'Authorization': `Bearer ${token}` } })
+                    .then(res => res.json())
+                    .then(user => {
+                        if (user.role !== 'admin') {
+                            var s = document.createElement('script');
+                            s.src = 'https://pl29464105.effectivecpmnetwork.com/1b/a8/38/1ba838ed76bc22378f33cccb731d8356.js';
+                            document.head.appendChild(s);
+                        }
+                    })
+                    .catch(() => {});
+            } else {
+                var s = document.createElement('script');
+                s.src = 'https://pl29464105.effectivecpmnetwork.com/1b/a8/38/1ba838ed76bc22378f33cccb731d8356.js';
+                document.head.appendChild(s);
+            }
+        })();
+    </script>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --dark: #0a0a0f;
+            --darker: #050508;
+            --glass: rgba(255,255,255,0.05);
+            --glass-border: rgba(255,255,255,0.1);
+            --success: #10b981;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+        }
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
-            color: #fff;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--text);
             min-height: 100vh;
         }
         .navbar {
             background: rgba(5,5,8,0.95);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid var(--glass-border);
             padding: 1rem 2rem;
             position: sticky;
             top: 0;
             z-index: 100;
         }
         .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .back-btn { color: #94a3b8; text-decoration: none; }
+        .logo { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .back-btn { color: var(--text-muted); text-decoration: none; }
         .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
         .stats-bar { display: flex; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
-        .stat-card { background: rgba(255,255,255,0.05); padding: 1rem 1.5rem; border-radius: 16px; }
-        .stat-number { font-size: 2rem; font-weight: 800; color: #6366f1; }
-        .tabs { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem; }
-        .tab-btn { background: none; border: none; color: #94a3b8; padding: 0.5rem 1.5rem; cursor: pointer; font-size: 1rem; transition: all 0.3s; }
-        .tab-btn.active { color: #6366f1; border-bottom: 2px solid #6366f1; }
+        .stat-card { background: var(--glass); padding: 1rem 1.5rem; border-radius: 16px; border: 1px solid var(--glass-border); }
+        .stat-number { font-size: 2rem; font-weight: 800; color: var(--primary); }
+        .tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; border-bottom: 1px solid var(--glass-border); padding-bottom: 1rem; }
+        .tab-btn { background: none; border: none; color: var(--text-muted); padding: 0.5rem 1.2rem; cursor: pointer; font-size: 0.9rem; transition: all 0.3s; border-radius: 10px; }
+        .tab-btn.active { background: var(--primary); color: white; }
         .matches-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem; }
         .match-card {
-            background: rgba(255,255,255,0.05);
+            background: var(--glass);
             border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid var(--glass-border);
             overflow: hidden;
             cursor: pointer;
             transition: all 0.3s;
         }
-        .match-card:hover { transform: translateY(-5px); border-color: #6366f1; }
+        .match-card:hover { transform: translateY(-5px); border-color: var(--primary); }
         .match-header { padding: 1rem; background: rgba(0,0,0,0.3); display: flex; justify-content: space-between; }
-        .league { color: #6366f1; font-weight: 600; }
-        .status { padding: 0.25rem 0.75rem; border-radius: 20px; background: #10b981; font-size: 0.8rem; }
-        .status.finished { background: #64748b; }
+        .league { color: var(--primary); font-weight: 600; }
+        .status { padding: 0.25rem 0.75rem; border-radius: 20px; background: var(--success); font-size: 0.8rem; }
+        .status.finished { background: var(--text-muted); }
         .match-body { padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
         .team { text-align: center; flex: 1; }
         .team-logo { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-bottom: 0.5rem; }
-        .score { font-size: 1.8rem; font-weight: 800; color: #6366f1; padding: 0 1rem; }
-        .match-footer { padding: 1rem; border-top: 1px solid rgba(255,255,255,0.1); }
-        .stream-btn { background: #6366f1; color: white; border: none; padding: 0.5rem 1rem; border-radius: 10px; cursor: pointer; width: 100%; }
+        .score { font-size: 1.8rem; font-weight: 800; color: var(--primary); padding: 0 1rem; }
+        .match-footer { padding: 1rem; border-top: 1px solid var(--glass-border); }
+        .stream-btn { background: var(--primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 10px; cursor: pointer; width: 100%; }
         .modal {
             display: none;
             position: fixed;
@@ -68,21 +99,21 @@
             justify-content: center;
         }
         .modal.active { display: flex; }
-        .modal-content { width: 90%; max-width: 1000px; background: #0a0a0f; border-radius: 24px; overflow: hidden; }
-        .modal-header { padding: 1rem; background: rgba(255,255,255,0.05); display: flex; justify-content: space-between; }
+        .modal-content { width: 90%; max-width: 1000px; background: var(--darker); border-radius: 24px; overflow: hidden; }
+        .modal-header { padding: 1rem; background: var(--glass); display: flex; justify-content: space-between; }
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; }
         .video-container video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
         .stream-select { padding: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
-        .stream-option { padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); border: none; border-radius: 10px; color: white; cursor: pointer; }
-        .stream-option.active { background: #6366f1; }
+        .stream-option { padding: 0.5rem 1rem; background: var(--glass); border: none; border-radius: 10px; color: white; cursor: pointer; }
+        .stream-option.active { background: var(--primary); }
         .close-modal { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
-        .loader { width: 50px; height: 50px; border: 3px solid rgba(255,255,255,0.1); border-top-color: #6366f1; border-radius: 50%; animation: spin 1s linear infinite; margin: 2rem auto; }
+        .loader { width: 50px; height: 50px; border: 3px solid var(--glass-border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 2rem auto; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .standings-table, .scores-table { width: 100%; background: rgba(255,255,255,0.05); border-radius: 16px; overflow-x: auto; }
+        .standings-table, .scores-table { width: 100%; background: var(--glass); border-radius: 16px; overflow-x: auto; }
         .standings-table table, .scores-table table { width: 100%; border-collapse: collapse; }
-        .standings-table th, .standings-table td, .scores-table th, .scores-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .footer { background: rgba(255,255,255,0.05); border-top: 1px solid rgba(255,255,255,0.1); padding: 2rem; text-align: center; margin-top: 4rem; }
-        @media (max-width: 768px) { .matches-grid { grid-template-columns: 1fr; } .stats-bar { flex-direction: column; } }
+        .standings-table th, .standings-table td, .scores-table th, .scores-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--glass-border); }
+        .footer { background: var(--glass); border-top: 1px solid var(--glass-border); padding: 2rem; text-align: center; margin-top: 4rem; }
+        @media (max-width: 768px) { .matches-grid { grid-template-columns: 1fr; } .tabs { gap: 0.3rem; } .tab-btn { padding: 0.3rem 0.8rem; font-size: 0.75rem; } }
     </style>
 </head>
 <body>
@@ -97,8 +128,8 @@
     <div class="container">
         <div class="stats-bar">
             <div class="stat-card"><div class="stat-number" id="matchesCount">0</div><div>Live Matches</div></div>
-            <div class="stat-card"><div class="stat-number" id="leaguesCount">8</div><div>Leagues</div></div>
-            <div class="stat-card"><div class="stat-number" id="streamsCount">0</div><div>Streams Available</div></div>
+            <div class="stat-card"><div class="stat-number">8</div><div>Leagues</div></div>
+            <div class="stat-card"><div class="stat-number" id="streamsCount">0</div><div>Streams</div></div>
         </div>
 
         <div class="tabs">
@@ -108,57 +139,28 @@
             <button class="tab-btn" onclick="switchTab('scorers')">⚽ Top Scorers</button>
             <button class="tab-btn" onclick="switchTab('predictions')">🔮 Predictions</button>
             <button class="tab-btn" onclick="switchTab('news')">📰 News</button>
-            <button class="tab-btn" onclick="switchTab('search')">🔍 Search</button>
         </div>
 
-        <div id="streamsTab">
-            <div id="matchesGrid" class="matches-grid"><div class="loader"></div></div>
-        </div>
-
-        <div id="scoresTab" style="display: none;">
-            <div class="scores-table" id="scoresTable"><div class="loader"></div></div>
-        </div>
-
+        <div id="streamsTab"><div id="matchesGrid" class="matches-grid"><div class="loader"></div></div></div>
+        <div id="scoresTab" style="display: none;"><div class="scores-table" id="scoresTable"><div class="loader"></div></div></div>
         <div id="standingsTab" style="display: none;">
-            <select id="leagueSelect" onchange="loadStandings()" style="padding: 0.5rem; background: rgba(255,255,255,0.1); border: none; border-radius: 10px; color: white; margin-bottom: 1rem;">
-                <option value="epl">Premier League</option>
-                <option value="laliga">La Liga</option>
-                <option value="bundesliga">Bundesliga</option>
-                <option value="seriea">Serie A</option>
-                <option value="ligue1">Ligue 1</option>
-                <option value="ucl">Champions League</option>
+            <select id="leagueSelect" onchange="loadStandings()" style="padding: 0.5rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 10px; color: white; margin-bottom: 1rem;">
+                <option value="epl">Premier League</option><option value="laliga">La Liga</option>
+                <option value="bundesliga">Bundesliga</option><option value="seriea">Serie A</option>
+                <option value="ligue1">Ligue 1</option><option value="ucl">Champions League</option>
             </select>
             <div class="standings-table" id="standingsTable"><div class="loader"></div></div>
         </div>
-
         <div id="scorersTab" style="display: none;">
-            <select id="scorerLeagueSelect" onchange="loadScorers()" style="padding: 0.5rem; background: rgba(255,255,255,0.1); border: none; border-radius: 10px; color: white; margin-bottom: 1rem;">
-                <option value="epl">Premier League</option>
-                <option value="laliga">La Liga</option>
-                <option value="bundesliga">Bundesliga</option>
-                <option value="seriea">Serie A</option>
-                <option value="ligue1">Ligue 1</option>
-                <option value="ucl">Champions League</option>
+            <select id="scorerLeagueSelect" onchange="loadScorers()" style="padding: 0.5rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 10px; color: white; margin-bottom: 1rem;">
+                <option value="epl">Premier League</option><option value="laliga">La Liga</option>
+                <option value="bundesliga">Bundesliga</option><option value="seriea">Serie A</option>
+                <option value="ligue1">Ligue 1</option><option value="ucl">Champions League</option>
             </select>
             <div class="standings-table" id="scorersTable"><div class="loader"></div></div>
         </div>
-
-        <div id="predictionsTab" style="display: none;">
-            <div id="predictionsGrid" class="matches-grid"><div class="loader"></div></div>
-        </div>
-
-        <div id="newsTab" style="display: none;">
-            <div id="newsGrid" class="matches-grid"><div class="loader"></div></div>
-        </div>
-
-        <div id="searchTab" style="display: none;">
-            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
-                <input type="text" id="searchInput" placeholder="Search player or team..." style="flex:1; padding: 0.8rem; background: rgba(255,255,255,0.1); border: none; border-radius: 10px; color: white;">
-                <button onclick="searchPlayer()" class="stream-btn" style="width: auto; padding: 0 1.5rem;">Search Player</button>
-                <button onclick="searchTeam()" class="stream-btn" style="width: auto; padding: 0 1.5rem;">Search Team</button>
-            </div>
-            <div id="searchResult"></div>
-        </div>
+        <div id="predictionsTab" style="display: none;"><div id="predictionsGrid" class="matches-grid"><div class="loader"></div></div></div>
+        <div id="newsTab" style="display: none;"><div id="newsGrid" class="matches-grid"><div class="loader"></div></div></div>
     </div>
 
     <div id="streamModal" class="modal">
@@ -169,20 +171,15 @@
         </div>
     </div>
 
-    <footer class="footer">
-        <p>Made with <i class="fas fa-heart" style="color:#ec4899;"></i> by <strong>Dev Gift</strong> | +2349164624021</p>
-    </footer>
+    <footer class="footer"><p>Made with <i class="fas fa-heart" style="color:#ec4899;"></i> by <strong>Dev Gift</strong> | +2349164624021</p></footer>
 
     <script>
         const token = localStorage.getItem('token');
         let currentStreams = [];
         let currentVideo = null;
 
-        if (!token) {
-            document.getElementById('authStatus').innerHTML = '<a href="/login.html" style="color:#6366f1;">Login to watch</a>';
-        } else {
-            document.getElementById('authStatus').innerHTML = '<span style="color:#10b981;"><i class="fas fa-check-circle"></i> Ready</span>';
-        }
+        if (!token) document.getElementById('authStatus').innerHTML = '<a href="/login.html" style="color:#6366f1;">Login to watch</a>';
+        else document.getElementById('authStatus').innerHTML = '<span style="color:#10b981;"><i class="fas fa-check-circle"></i> Ready</span>';
 
         function switchTab(tab) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -192,15 +189,12 @@
             document.getElementById('scorersTab').style.display = 'none';
             document.getElementById('predictionsTab').style.display = 'none';
             document.getElementById('newsTab').style.display = 'none';
-            document.getElementById('searchTab').style.display = 'none';
-            
             if (tab === 'streams') { document.getElementById('streamsTab').style.display = 'block'; document.querySelector('.tab-btn:nth-child(1)').classList.add('active'); loadMatches(); }
             else if (tab === 'scores') { document.getElementById('scoresTab').style.display = 'block'; document.querySelector('.tab-btn:nth-child(2)').classList.add('active'); loadScores(); }
             else if (tab === 'standings') { document.getElementById('standingsTab').style.display = 'block'; document.querySelector('.tab-btn:nth-child(3)').classList.add('active'); loadStandings(); }
             else if (tab === 'scorers') { document.getElementById('scorersTab').style.display = 'block'; document.querySelector('.tab-btn:nth-child(4)').classList.add('active'); loadScorers(); }
             else if (tab === 'predictions') { document.getElementById('predictionsTab').style.display = 'block'; document.querySelector('.tab-btn:nth-child(5)').classList.add('active'); loadPredictions(); }
             else if (tab === 'news') { document.getElementById('newsTab').style.display = 'block'; document.querySelector('.tab-btn:nth-child(6)').classList.add('active'); loadNews(); }
-            else if (tab === 'search') { document.getElementById('searchTab').style.display = 'block'; document.querySelector('.tab-btn:nth-child(7)').classList.add('active'); }
         }
 
         async function loadMatches() {
@@ -216,11 +210,7 @@
                     document.getElementById('matchesGrid').innerHTML = matches.map(m => `
                         <div class="match-card" onclick="openStream('${m.id}', '${m.homeTeam} vs ${m.awayTeam}', ${JSON.stringify(m.streams).replace(/"/g, '&quot;')})">
                             <div class="match-header"><span class="league">${m.league}</span><span class="status ${m.status.toLowerCase()}">${m.status}</span></div>
-                            <div class="match-body">
-                                <div class="team"><img src="${m.homeLogo}" class="team-logo" onerror="this.src='https://via.placeholder.com/60'"><div>${m.homeTeam}</div></div>
-                                <div class="score">${m.homeScore} - ${m.awayScore}</div>
-                                <div class="team"><img src="${m.awayLogo}" class="team-logo" onerror="this.src='https://via.placeholder.com/60'"><div>${m.awayTeam}</div></div>
-                            </div>
+                            <div class="match-body"><div class="team"><img src="${m.homeLogo}" class="team-logo" onerror="this.src='https://via.placeholder.com/60'"><div>${m.homeTeam}</div></div><div class="score">${m.homeScore} - ${m.awayScore}</div><div class="team"><img src="${m.awayLogo}" class="team-logo" onerror="this.src='https://via.placeholder.com/60'"><div>${m.awayTeam}</div></div></div>
                             <div class="match-footer"><button class="stream-btn"><i class="fas fa-play"></i> Watch Live</button></div>
                         </div>
                     `).join('');
@@ -232,9 +222,7 @@
             try {
                 const res = await fetch('/api/livescores');
                 const data = await res.json();
-                document.getElementById('scoresTable').innerHTML = `<table><tr><th>Home</th><th>Score</th><th>Away</th></tr>${
-                    (data.result || []).map(m => `<tr><td>${m.homeTeam}</td><td>${m.homeScore} - ${m.awayScore}</td><td>${m.awayTeam}</td></tr>`).join('')
-                }</table>`;
+                document.getElementById('scoresTable').innerHTML = `<table><thead><tr><th>Home</th><th>Score</th><th>Away</th></tr></thead><tbody>${(data.result || []).map(m => `<tr><td>${m.homeTeam}</td><td>${m.homeScore} - ${m.awayScore}</td><td>${m.awayTeam}</td></tr>`).join('')}</tbody></table>`;
             } catch(e) { document.getElementById('scoresTable').innerHTML = '<p>Failed to load scores</p>'; }
         }
 
@@ -243,9 +231,7 @@
             try {
                 const res = await fetch(`/api/standings/${league}`);
                 const data = await res.json();
-                document.getElementById('standingsTable').innerHTML = `<table><tr><th>#</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th></tr>${
-                    (data.result || []).map((t,i) => `<tr><td>${i+1}</td><td>${t.team}</td><td>${t.played}</td><td>${t.wins}</td><td>${t.draws}</td><td>${t.losses}</td><td>${t.goalsFor}</td><td>${t.goalsAgainst}</td><td>${t.goalDiff}</td><td>${t.points}</td></tr>`).join('')
-                }</table>`;
+                document.getElementById('standingsTable').innerHTML = `<table><thead><tr><th>#</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th></tr></thead><tbody>${(data.result || []).map((t,i) => `<tr><td>${i+1}</td><td>${t.team}</td><td>${t.played}</td><td>${t.wins}</td><td>${t.draws}</td><td>${t.losses}</td><td>${t.goalsFor}</td><td>${t.goalsAgainst}</td><td>${t.goalDiff}</td><td>${t.points}</td></tr>`).join('')}</tbody></table>`;
             } catch(e) { document.getElementById('standingsTable').innerHTML = '<p>Failed to load standings</p>'; }
         }
 
@@ -254,9 +240,7 @@
             try {
                 const res = await fetch(`/api/scorers/${league}`);
                 const data = await res.json();
-                document.getElementById('scorersTable').innerHTML = `<table><tr><th>#</th><th>Player</th><th>Team</th><th>Goals</th></tr>${
-                    (data.result || []).map((p,i) => `<tr><td>${i+1}</td><td>${p.player}</td><td>${p.team}</td><td>${p.goals}</td></tr>`).join('')
-                }</table>`;
+                document.getElementById('scorersTable').innerHTML = `<table><thead><tr><th>#</th><th>Player</th><th>Team</th><th>Goals</th></tr></thead><tbody>${(data.result || []).map((p,i) => `<tr><td>${i+1}</td><td>${p.player}</td><td>${p.team}</td><td>${p.goals}</td></tr>`).join('')}</tbody></table>`;
             } catch(e) { document.getElementById('scorersTable').innerHTML = '<p>Failed to load scorers</p>'; }
         }
 
@@ -264,10 +248,7 @@
             try {
                 const res = await fetch('/api/predictions');
                 const data = await res.json();
-                document.getElementById('predictionsGrid').innerHTML = (data.result || []).map(p => `
-                    <div class="match-card"><div class="match-header"><span>${p.homeTeam} vs ${p.awayTeam}</span></div>
-                    <div class="match-body" style="flex-direction:column;"><p><strong>Prediction:</strong> ${p.prediction}</p><p><strong>Over/Under:</strong> ${p.overUnder}</p><p><strong>Confidence:</strong> ${p.confidence}%</p></div></div>
-                `).join('');
+                document.getElementById('predictionsGrid').innerHTML = (data.result || []).map(p => `<div class="match-card"><div class="match-header"><span>${p.homeTeam} vs ${p.awayTeam}</span></div><div class="match-body" style="flex-direction:column;"><p><strong>Prediction:</strong> ${p.prediction}</p><p><strong>Over/Under:</strong> ${p.overUnder}</p><p><strong>Confidence:</strong> ${p.confidence}%</p></div></div>`).join('');
             } catch(e) { document.getElementById('predictionsGrid').innerHTML = '<p>Failed to load predictions</p>'; }
         }
 
@@ -275,27 +256,8 @@
             try {
                 const res = await fetch('/api/news');
                 const data = await res.json();
-                document.getElementById('newsGrid').innerHTML = (data.result || []).map(n => `
-                    <div class="match-card"><div class="match-header"><span>📰 ${n.title}</span></div>
-                    <div class="match-body" style="flex-direction:column;"><p>${n.description}</p><small>${n.date}</small></div></div>
-                `).join('');
+                document.getElementById('newsGrid').innerHTML = (data.result || []).map(n => `<div class="match-card"><div class="match-header"><span>📰 ${n.title}</span></div><div class="match-body" style="flex-direction:column;"><p>${n.description}</p><small>${n.date}</small></div></div>`).join('');
             } catch(e) { document.getElementById('newsGrid').innerHTML = '<p>Failed to load news</p>'; }
-        }
-
-        async function searchPlayer() {
-            const name = document.getElementById('searchInput').value;
-            if (!name) return;
-            const res = await fetch(`/api/search/player?name=${encodeURIComponent(name)}`);
-            const data = await res.json();
-            document.getElementById('searchResult').innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
-        }
-
-        async function searchTeam() {
-            const name = document.getElementById('searchInput').value;
-            if (!name) return;
-            const res = await fetch(`/api/search/team?name=${encodeURIComponent(name)}`);
-            const data = await res.json();
-            document.getElementById('searchResult').innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
         }
 
         function openStream(id, title, streams) {
@@ -304,13 +266,6 @@
             document.getElementById('streamOptions').innerHTML = streams.map((s,i) => `<button class="stream-option ${i===0?'active':''}" onclick="loadStream(${i})">${s.title}</button>`).join('');
             document.getElementById('streamModal').classList.add('active');
             loadStream(0);
-            if (token) {
-                fetch('/api/watch-history', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                    body: JSON.stringify({ matchId: id, matchTitle: title })
-                }).catch(e=>{});
-            }
         }
 
         function loadStream(index) {
@@ -329,10 +284,7 @@
                     video.src = url;
                     video.addEventListener('loadedmetadata', () => video.play());
                 }
-            } else {
-                video.src = url;
-                video.play();
-            }
+            } else { video.src = url; video.play(); }
         }
 
         function closeModal() {
