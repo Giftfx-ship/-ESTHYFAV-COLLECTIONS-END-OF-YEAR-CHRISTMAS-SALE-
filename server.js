@@ -81,39 +81,35 @@ async function callAPI(endpoint, params = {}) {
     url.searchParams.append('apikey', API_KEY);
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
     try {
-        const response = await fetch(url.toString(), { timeout: 10000 });
+        const response = await fetch(url.toString(), { timeout: 15000 });
         return await response.json();
     } catch (error) {
         return { success: false, error: error.message };
     }
 }
 
-// WORKING STREAM SOURCES
+// WORKING STREAM SOURCES (Fallback)
 const WORKING_STREAMS = [
     { title: "Main Stream", url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" },
     { title: "Backup Stream", url: "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8" },
     { title: "HD Stream", url: "https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8" }
 ];
 
-// ============ TEMP NUMBER PROVIDERS ============
-const TEMP_PROVIDERS = [
-    { name: 'receive-sms-online', baseUrl: 'https://apis.davidcyril.name.ng/tempnumber/receive-sms-online' },
-    { name: 'hs3x', baseUrl: 'https://apis.davidcyril.name.ng/tempnumber/hs3x' },
-    { name: 'sms24', baseUrl: 'https://apis.davidcyril.name.ng/tempnumber/sms24' },
-    { name: 'smstome', baseUrl: 'https://apis.davidcyril.name.ng/tempnumber/smstome' }
-];
-
-// ============ FOOTBALL APIS ============
+// ============ FOOTBALL STREAMING API ============
 app.get('/api/matches', async (req, res) => {
     try {
-        const data = await callAPI('/football/streaming');
+        const { league } = req.query;
+        const data = await callAPI('/football/streaming', league ? { league } : {});
+        
         if (data.success && data.result?.matches?.length > 0) {
+            // Add fallback streams if needed
             const matches = data.result.matches.map(match => ({
                 ...match,
                 streams: match.streams?.length > 0 ? match.streams : WORKING_STREAMS
             }));
-            res.json({ success: true, result: { matches, totalMatches: matches.length } });
+            res.json({ success: true, result: { ...data.result, matches } });
         } else {
+            // Return demo matches if API fails
             res.json({
                 success: true,
                 result: {
@@ -128,65 +124,114 @@ app.get('/api/matches', async (req, res) => {
             });
         }
     } catch (error) {
-        res.json({
-            success: true,
-            result: {
-                totalMatches: 4,
-                matches: [
-                    { id: "1", homeTeam: "Manchester City", awayTeam: "Arsenal", homeScore: "2", awayScore: "1", homeLogo: "https://resources.premierleague.com/premierleague/badges/50/t3.png", awayLogo: "https://resources.premierleague.com/premierleague/badges/50/t1.png", league: "Premier League", status: "LIVE", startTime: new Date().toISOString(), streams: WORKING_STREAMS },
-                    { id: "2", homeTeam: "Real Madrid", awayTeam: "Barcelona", homeScore: "1", awayScore: "1", homeLogo: "https://cdn.freebiesupply.com/logos/large/2x/real-madrid-c-f-logo-png-transparent.png", awayLogo: "https://cdn.freebiesupply.com/logos/large/2x/fc-barcelona-logo-png-transparent.png", league: "La Liga", status: "LIVE", startTime: new Date().toISOString(), streams: WORKING_STREAMS },
-                    { id: "3", homeTeam: "Bayern Munich", awayTeam: "Borussia Dortmund", homeScore: "3", awayScore: "0", homeLogo: "https://cdn.freebiesupply.com/logos/large/2x/bayern-munchen-logo-png-transparent.png", awayLogo: "https://cdn.freebiesupply.com/logos/large/2x/borussia-dortmund-logo-png-transparent.png", league: "Bundesliga", status: "LIVE", startTime: new Date().toISOString(), streams: WORKING_STREAMS },
-                    { id: "4", homeTeam: "Liverpool", awayTeam: "Chelsea", homeScore: "2", awayScore: "2", homeLogo: "https://resources.premierleague.com/premierleague/badges/50/t9.png", awayLogo: "https://resources.premierleague.com/premierleague/badges/50/t8.png", league: "Premier League", status: "LIVE", startTime: new Date().toISOString(), streams: WORKING_STREAMS }
-                ]
-            }
-        });
+        res.status(500).json({ error: 'Failed to fetch matches' });
     }
 });
 
-app.get('/api/standings/:league', async (req, res) => {
+// ============ LIVE SCORES API ============
+app.get('/api/livescores', async (req, res) => {
     try {
-        const { league } = req.params;
-        const endpoints = {
-            epl: '/football/epl/standings', laliga: '/football/laliga/standings',
-            bundesliga: '/football/bundesliga/standings', seriea: '/football/seriea/standings',
-            ligue1: '/football/ligue1/standings', ucl: '/football/ucl/standings'
-        };
-        const endpoint = endpoints[league];
-        if (!endpoint) return res.status(400).json({ error: 'Invalid league' });
-        const data = await callAPI(endpoint);
+        const data = await callAPI('/football/livescore');
         res.json(data);
     } catch (error) {
-        res.json({ success: true, result: [] });
+        res.status(500).json({ error: 'Failed to fetch live scores' });
     }
 });
 
-app.get('/api/scorers/:league', async (req, res) => {
+// ============ MATCH PREDICTIONS API ============
+app.get('/api/predictions', async (req, res) => {
     try {
-        const { league } = req.params;
-        const endpoints = {
-            epl: '/football/epl/scorers', laliga: '/football/laliga/scorers',
-            bundesliga: '/football/bundesliga/scorers', seriea: '/football/seriea/scorers',
-            ligue1: '/football/ligue1/scorers', ucl: '/football/ucl/scorers'
-        };
-        const endpoint = endpoints[league];
-        if (!endpoint) return res.status(400).json({ error: 'Invalid league' });
-        const data = await callAPI(endpoint);
+        const data = await callAPI('/football/predictions');
         res.json(data);
     } catch (error) {
-        res.json({ success: true, result: [] });
+        res.status(500).json({ error: 'Failed to fetch predictions' });
     }
 });
 
+// ============ FOOTBALL NEWS API ============
 app.get('/api/news', async (req, res) => {
     try {
         const data = await callAPI('/football/news');
         res.json(data);
     } catch (error) {
-        res.json({ success: true, result: [] });
+        res.status(500).json({ error: 'Failed to fetch news' });
+    }
+});
+
+// ============ STANDINGS API ============
+app.get('/api/standings/:league', async (req, res) => {
+    try {
+        const { league } = req.params;
+        const endpoints = {
+            epl: '/football/epl/standings',
+            laliga: '/football/laliga/standings',
+            bundesliga: '/football/bundesliga/standings',
+            seriea: '/football/seriea/standings',
+            ligue1: '/football/ligue1/standings',
+            ucl: '/football/ucl/standings'
+        };
+        const endpoint = endpoints[league];
+        if (!endpoint) return res.status(400).json({ error: 'Invalid league' });
+        const data = await callAPI(endpoint);
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch standings' });
+    }
+});
+
+// ============ TOP SCORERS API ============
+app.get('/api/scorers/:league', async (req, res) => {
+    try {
+        const { league } = req.params;
+        const endpoints = {
+            epl: '/football/epl/scorers',
+            laliga: '/football/laliga/scorers',
+            bundesliga: '/football/bundesliga/scorers',
+            seriea: '/football/seriea/scorers',
+            ligue1: '/football/ligue1/scorers',
+            ucl: '/football/ucl/scorers'
+        };
+        const endpoint = endpoints[league];
+        if (!endpoint) return res.status(400).json({ error: 'Invalid league' });
+        const data = await callAPI(endpoint);
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch scorers' });
+    }
+});
+
+// ============ PLAYER SEARCH API ============
+app.get('/api/search/player', async (req, res) => {
+    try {
+        const { name } = req.query;
+        if (!name) return res.status(400).json({ error: 'Player name required' });
+        const data = await callAPI('/football/player-search', { name });
+        res.json({ success: true, result: data.result || [] });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to search player' });
+    }
+});
+
+// ============ TEAM SEARCH API ============
+app.get('/api/search/team', async (req, res) => {
+    try {
+        const { name } = req.query;
+        if (!name) return res.status(400).json({ error: 'Team name required' });
+        const data = await callAPI('/football/team-search', { name });
+        res.json({ success: true, result: data.result || [] });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to search team' });
     }
 });
 
 // ============ TEMP NUMBER APIS ============
+const TEMP_PROVIDERS = [
+    { name: 'receive-sms-online', baseUrl: 'https://apis.davidcyril.name.ng/tempnumber/receive-sms-online' },
+    { name: 'hs3x', baseUrl: 'https://apis.davidcyril.name.ng/tempnumber/hs3x' },
+    { name: 'sms24', baseUrl: 'https://apis.davidcyril.name.ng/tempnumber/sms24' },
+    { name: 'smstome', baseUrl: 'https://apis.davidcyril.name.ng/tempnumber/smstome' }
+];
+
 app.get('/api/temp-numbers', authenticate, async (req, res) => {
     try {
         const allNumbers = [];
@@ -222,32 +267,24 @@ app.get('/api/temp-inbox', authenticate, async (req, res) => {
     try {
         const { number, provider, slug } = req.query;
         if (!number || !provider) return res.status(400).json({ error: 'Number and provider required' });
-        
         const providerConfig = TEMP_PROVIDERS.find(p => p.name === provider);
         if (!providerConfig) return res.status(400).json({ error: 'Invalid provider' });
-        
-        let inboxUrl;
-        if (slug) {
-            inboxUrl = `${providerConfig.baseUrl}/inbox/${slug}`;
-        } else {
-            inboxUrl = `${providerConfig.baseUrl}/inbox?number=${encodeURIComponent(number)}`;
-        }
-        
+        let inboxUrl = `${providerConfig.baseUrl}/inbox`;
+        if (slug) inboxUrl = `${providerConfig.baseUrl}/inbox/${slug}`;
+        else inboxUrl = `${providerConfig.baseUrl}/inbox?number=${encodeURIComponent(number)}`;
         const response = await fetch(inboxUrl, { timeout: 15000 });
         const data = await response.json();
-        
         let messages = [];
         if (data.result?.messages) messages = data.result.messages;
         else if (data.messages) messages = data.messages;
         else if (Array.isArray(data)) messages = data;
-        
         res.json({ success: true, number, provider, messages, count: messages.length });
     } catch (error) {
         res.json({ success: true, number, provider, messages: [], count: 0 });
     }
 });
 
-// ============ AI DEEPSEEK-V3 API (FIXED) ============
+// ============ AI DEEPSEEK-V3 API ============
 app.post('/api/ai/chat', authenticate, async (req, res) => {
     try {
         const { message } = req.body;
@@ -276,7 +313,6 @@ app.post('/api/ai/chat', authenticate, async (req, res) => {
             } catch (e) {}
         }
         
-        // Fallback responses if AI fails
         const fallbackResponses = [
             "That's interesting! Tell me more about that.",
             "I understand. How can I help you further?",
@@ -293,7 +329,6 @@ app.post('/api/ai/chat', authenticate, async (req, res) => {
         
         res.json({ success: true, response: finalResponse });
     } catch (error) {
-        // Always return a friendly response
         res.json({ success: true, response: "I'm here to help! What would you like to know?" });
     }
 });
@@ -576,5 +611,7 @@ app.get('*', (req, res) => {
 app.listen(PORT, () => {
     console.log(`\n🚀 SERVER: http://localhost:${PORT}`);
     console.log(`🔑 Admin Key: ${ADMIN_KEY}`);
-    console.log(`✅ MongoDB Connected\n`);
+    console.log(`✅ MongoDB Connected`);
+    console.log(`📡 Football API: ${API_KEY}`);
+    console.log(`🎬 Streaming: ${API_BASE}/football/streaming`);
 });
