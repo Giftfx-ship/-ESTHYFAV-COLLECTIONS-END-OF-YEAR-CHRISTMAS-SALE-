@@ -2,70 +2,46 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>DEVHUB SPORTS | Ultimate Football Platform</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Football - DEVHUB SPORTS</title>
     
     <!-- Adsterra Ads -->
     <script src="https://penguinsincequalify.com/f4/63/a7/f463a78a655d5b6a10eaeec7146802e9.js"></script>
     <script async="async" data-cfasync="false" src="https://penguinsincequalify.com/b26d1487549578016dcb13eeeae72f35/invoke.js"></script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* ========== CSS VARIABLES ========== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         :root {
             --primary: #6366f1;
             --primary-dark: #4f46e5;
-            --primary-light: #818cf8;
             --secondary: #ec4899;
-            --secondary-dark: #db2777;
             --success: #10b981;
-            --warning: #f59e0b;
             --danger: #ef4444;
-            --info: #3b82f6;
-            
-            /* Dark Theme (Default) */
+            --warning: #f59e0b;
+        }
+        
+        body.dark {
             --bg-primary: #0a0a0f;
             --bg-secondary: #12121a;
-            --bg-card: rgba(255, 255, 255, 0.05);
-            --bg-card-hover: rgba(255, 255, 255, 0.08);
-            --bg-input: rgba(255, 255, 255, 0.08);
+            --bg-card: rgba(255,255,255,0.05);
             --text-primary: #f1f5f9;
             --text-secondary: #94a3b8;
-            --text-muted: #64748b;
-            --border: rgba(255, 255, 255, 0.1);
-            --border-light: rgba(255, 255, 255, 0.05);
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            --radius-sm: 0.5rem;
-            --radius-md: 0.75rem;
-            --radius-lg: 1rem;
-            --radius-xl: 1.5rem;
-            --radius-2xl: 2rem;
+            --border: rgba(255,255,255,0.1);
         }
-
-        /* Light Theme */
+        
         body.light {
             --bg-primary: #f8fafc;
             --bg-secondary: #ffffff;
-            --bg-card: rgba(0, 0, 0, 0.03);
-            --bg-card-hover: rgba(0, 0, 0, 0.05);
-            --bg-input: rgba(0, 0, 0, 0.04);
+            --bg-card: rgba(0,0,0,0.03);
             --text-primary: #0f172a;
             --text-secondary: #475569;
-            --text-muted: #64748b;
-            --border: rgba(0, 0, 0, 0.08);
-            --border-light: rgba(0, 0, 0, 0.04);
+            --border: rgba(0,0,0,0.08);
         }
-
+        
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg-primary);
@@ -73,144 +49,22 @@
             min-height: 100vh;
             transition: all 0.3s ease;
         }
-
-        /* ========== ANIMATED BACKGROUND ========== */
-        .bg-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .bg-animation::before {
-            content: '';
-            position: absolute;
-            top: 20%;
-            left: 10%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: float 20s infinite ease-in-out;
-        }
-
-        .bg-animation::after {
-            content: '';
-            position: absolute;
-            bottom: 10%;
-            right: 5%;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(236, 72, 153, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: float 25s infinite ease-in-out reverse;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -30px) scale(1.05); }
-            66% { transform: translate(-20px, 20px) scale(0.95); }
-        }
-
-        /* ========== CUSTOM SCROLLBAR ========== */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-card);
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-dark);
-        }
-
-        /* ========== NAVBAR ========== */
+        
+        /* Navbar */
         .navbar {
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0,0,0,0.8);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
             padding: 1rem 2rem;
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: 100;
         }
-
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            font-family: 'Space Grotesk', monospace;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-decoration: none;
-        }
-
-        .logo small {
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-            font-weight: 400;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-            font-weight: 500;
-            padding: 0.5rem 0;
-            position: relative;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transition: width 0.3s;
-        }
-
-        .nav-links a:hover::after,
-        .nav-links a.active::after {
-            width: 100%;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: var(--primary);
-        }
-
-        /* ========== THEME TOGGLE ========== */
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .logo { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; font-family: 'Space Grotesk', monospace; }
+        .back-btn { color: var(--text-secondary); text-decoration: none; transition: color 0.3s; }
+        .back-btn:hover { color: var(--primary); }
+        
         .theme-toggle {
             background: var(--bg-card);
             border: 1px solid var(--border);
@@ -220,445 +74,410 @@
             display: flex;
             gap: 0.25rem;
         }
-
         .theme-toggle span {
-            padding: 0.4rem 0.9rem;
+            padding: 0.3rem 0.8rem;
             border-radius: 30px;
             font-size: 0.8rem;
             transition: all 0.3s;
             cursor: pointer;
         }
-
-        .theme-toggle span i {
-            margin-right: 0.3rem;
-        }
-
-        .theme-toggle span.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        /* ========== BUTTONS ========== */
-        .btn {
-            padding: 0.6rem 1.3rem;
-            border-radius: 12px;
-            font-weight: 600;
+        .theme-toggle span.active { background: var(--primary); color: white; }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        
+        /* Stats Bar */
+        .stats-bar { display: flex; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .stat-card { background: var(--bg-card); padding: 1rem 1.5rem; border-radius: 16px; border: 1px solid var(--border); }
+        .stat-number { font-size: 2rem; font-weight: 800; color: var(--primary); font-family: 'Space Grotesk', monospace; }
+        
+        /* Tabs */
+        .tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+        .tab-btn { background: none; border: none; color: var(--text-secondary); padding: 0.6rem 1.3rem; cursor: pointer; font-size: 0.9rem; transition: all 0.3s; border-radius: 40px; font-weight: 500; }
+        .tab-btn.active { background: var(--primary); color: white; }
+        
+        /* Matches Grid */
+        .matches-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem; }
+        .match-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            overflow: hidden;
             cursor: pointer;
             transition: all 0.3s;
-            border: none;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
         }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-        }
-
-        .btn-outline:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: rgba(99, 102, 241, 0.1);
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, var(--danger), #dc2626);
-            color: white;
-        }
-
-        /* ========== CONTAINER ========== */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        /* ========== HERO SECTION ========== */
-        .hero {
-            text-align: center;
-            padding: 4rem 0;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            font-family: 'Space Grotesk', monospace;
-            background: linear-gradient(135deg, #ffffff, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* ========== STATS BAR ========== */
-        .stats {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin: 2rem 0 3rem;
-            flex-wrap: wrap;
-        }
-
-        .stat-card {
-            background: var(--bg-card);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-xl);
-            padding: 1.5rem;
-            text-align: center;
-            min-width: 150px;
-            transition: all 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--primary);
-            font-family: 'Space Grotesk', monospace;
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
-        }
-
-        /* ========== SECTION TITLE ========== */
-        .section-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin: 3rem 0 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            font-family: 'Space Grotesk', monospace;
-        }
-
-        .section-title i {
-            color: var(--primary);
-            font-size: 1.8rem;
-        }
-
-        /* ========== TOOLS GRID ========== */
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .tool-card {
-            background: var(--bg-card);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-xl);
-            padding: 2rem 1.5rem;
-            text-align: center;
-            transition: all 0.3s;
-            cursor: pointer;
-            text-decoration: none;
-            color: var(--text-primary);
-            display: block;
-        }
-
-        .tool-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--primary);
-            box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.3);
-        }
-
-        .tool-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .tool-card h3 {
-            margin-bottom: 0.5rem;
-            font-size: 1.2rem;
-        }
-
-        .tool-card p {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-        }
-
-        /* ========== NATIVE AD ========== */
-        .native-ad {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            margin: 2rem 0;
-            padding: 1rem;
-            text-align: center;
-            border: 1px solid var(--border);
-        }
-
-        .ad-label {
-            font-size: 10px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        /* ========== FOOTER ========== */
-        .footer {
-            background: var(--bg-card);
-            border-top: 1px solid var(--border);
-            padding: 2rem;
-            text-align: center;
-            margin-top: 4rem;
-        }
-
-        .footer p {
-            color: var(--text-secondary);
-        }
-
-        .footer a {
-            color: var(--primary);
-            text-decoration: none;
-        }
-
-        /* ========== TOAST NOTIFICATION ========== */
-        .toast {
+        .match-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .match-header { padding: 1rem; background: rgba(0,0,0,0.3); display: flex; justify-content: space-between; }
+        .league { color: var(--primary); font-weight: 600; font-size: 0.8rem; }
+        .status { padding: 0.25rem 0.75rem; border-radius: 20px; background: var(--success); font-size: 0.75rem; font-weight: 600; color: white; }
+        .status.finished { background: var(--text-secondary); }
+        .match-body { padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+        .team { text-align: center; flex: 1; }
+        .team-logo { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-bottom: 0.5rem; }
+        .team-name { font-weight: 600; font-size: 0.9rem; }
+        .score { font-size: 1.8rem; font-weight: 800; color: var(--primary); font-family: 'Space Grotesk', monospace; }
+        .match-footer { padding: 1rem; border-top: 1px solid var(--border); }
+        .stream-btn { background: var(--primary); color: white; border: none; padding: 0.6rem 1rem; border-radius: 12px; cursor: pointer; width: 100%; font-weight: 600; transition: all 0.3s; }
+        .stream-btn:hover { background: var(--primary-dark); transform: scale(0.98); }
+        
+        /* Modal */
+        .modal {
+            display: none;
             position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: var(--bg-secondary);
-            backdrop-filter: blur(10px);
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            border-left: 4px solid var(--primary);
-            box-shadow: var(--shadow-lg);
-            z-index: 1100;
-            animation: slideIn 0.3s ease;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
         }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+        .modal.active { display: flex; }
+        .modal-content { width: 90%; max-width: 1000px; background: var(--bg-primary); border-radius: 24px; overflow: hidden; border: 1px solid var(--border); }
+        .modal-header { padding: 1rem; background: var(--bg-card); display: flex; justify-content: space-between; align-items: center; }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; }
+        .video-container video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .stream-select { padding: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .stream-option { padding: 0.5rem 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; color: var(--text-primary); cursor: pointer; transition: all 0.3s; }
+        .stream-option.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .close-modal { background: none; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; }
+        
+        /* Predictions Card */
+        .prediction-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
         }
-
-        /* ========== LOADER ========== */
-        .loader {
-            width: 50px;
-            height: 50px;
-            border: 3px solid var(--border);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 2rem auto;
+        .prediction-stats { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; }
+        .prediction-stat { flex: 1; text-align: center; padding: 0.8rem; background: rgba(0,0,0,0.2); border-radius: 12px; }
+        .prediction-value { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+        .value-bet { background: var(--warning); color: #1a1a2e; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-weight: bold; }
+        
+        /* News Card */
+        .news-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
         }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .news-card:hover { transform: translateY(-3px); }
+        .news-image { width: 100%; height: 180px; object-fit: cover; }
+        .news-content { padding: 1rem; }
+        .news-title { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; line-height: 1.3; }
+        .news-summary { font-size: 0.8rem; color: var(--text-secondary); }
+        .news-time { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.5rem; display: block; }
+        
+        /* Player Search */
+        .search-container { margin-bottom: 2rem; }
+        .search-box { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .search-input { flex: 1; padding: 0.8rem 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; color: var(--text-primary); font-size: 1rem; }
+        .search-input:focus { outline: none; border-color: var(--primary); }
+        .player-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
         }
-
-        /* ========== RESPONSIVE ========== */
+        .player-card:hover { border-color: var(--primary); }
+        .player-avatar { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; }
+        .player-info { flex: 1; }
+        .player-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.3rem; }
+        .player-detail { font-size: 0.8rem; color: var(--text-secondary); }
+        
+        /* Standings Table */
+        .standings-table { width: 100%; background: var(--bg-card); border-radius: 16px; overflow: auto; }
+        .standings-table table { width: 100%; border-collapse: collapse; }
+        .standings-table th, .standings-table td { padding: 0.8rem; text-align: left; border-bottom: 1px solid var(--border); }
+        .standings-table th { background: rgba(0,0,0,0.2); color: var(--text-secondary); font-weight: 600; font-size: 0.8rem; }
+        .standings-table tr:hover { background: var(--bg-card-hover); }
+        
+        .loader { width: 50px; height: 50px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 2rem auto; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .native-ad { background: var(--bg-card); border-radius: 16px; margin: 2rem 0; padding: 1rem; text-align: center; border: 1px solid var(--border); }
+        .ad-label { font-size: 10px; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 8px; display: block; }
+        
+        .footer { background: var(--bg-card); border-top: 1px solid var(--border); padding: 2rem; text-align: center; margin-top: 4rem; }
+        
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2rem; }
-            .nav-links { display: none; }
-            .tools-grid { grid-template-columns: 1fr; }
-            .stats { gap: 1rem; }
-            .stat-card { padding: 1rem; min-width: 100px; }
-            .stat-number { font-size: 1.5rem; }
-            .section-title { font-size: 1.3rem; }
-            .container { padding: 1rem; }
-        }
-
-        @media (max-width: 480px) {
-            .hero { padding: 2rem 0; }
-            .hero h1 { font-size: 1.6rem; }
-            .btn { padding: 0.5rem 1rem; font-size: 0.8rem; }
+            .matches-grid { grid-template-columns: 1fr; }
+            .tabs { gap: 0.3rem; }
+            .tab-btn { padding: 0.4rem 0.9rem; font-size: 0.75rem; }
+            .stats-bar { flex-direction: column; }
+            .team-logo { width: 45px; height: 45px; }
+            .score { font-size: 1.3rem; }
         }
     </style>
 </head>
 <body>
-    <div class="bg-animation"></div>
-
     <nav class="navbar">
         <div class="nav-container">
-            <a href="/" class="logo">DEVHUB SPORTS <small>by Dev Gift</small></a>
-            <div class="nav-links">
-                <a href="/" class="active">Home</a>
-                <a href="/football.html">⚽ Live Matches</a>
-                <a href="/standings.html">🏆 Standings</a>
-                <a href="/tools.html">🛠️ Tools</a>
-                <a href="/ai.html">🤖 AI</a>
-                <a href="/temp-numbers.html">📞 Temp</a>
-                <a href="/upload.html">📁 Upload</a>
-                <a href="/admin.html" id="adminLink" style="display:none;">👑 Admin</a>
-            </div>
+            <a href="/" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Home</a>
+            <div class="logo">⚽ Live Football Hub</div>
             <div style="display: flex; gap: 1rem; align-items: center;">
                 <div class="theme-toggle" id="themeToggle">
-                    <span class="dark active" onclick="setTheme('dark')"><i class="fas fa-moon"></i> Dark</span>
-                    <span class="light" onclick="setTheme('light')"><i class="fas fa-sun"></i> Light</span>
+                    <span class="dark active" onclick="setTheme('dark')"><i class="fas fa-moon"></i></span>
+                    <span class="light" onclick="setTheme('light')"><i class="fas fa-sun"></i></span>
                 </div>
-                <div id="authButtons">
-                    <button class="btn btn-outline" onclick="window.location.href='/login.html'"><i class="fas fa-sign-in-alt"></i> Login</button>
-                    <button class="btn btn-primary" onclick="window.location.href='/register.html'"><i class="fas fa-user-plus"></i> Sign Up</button>
-                </div>
-                <div id="userMenu" style="display: none;">
-                    <span id="usernameDisplay" style="margin-right: 1rem;"></span>
-                    <button class="btn btn-outline" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
-                </div>
+                <div id="authStatus"></div>
             </div>
         </div>
     </nav>
 
     <div class="container">
-        <div class="hero">
-            <h1>Live Football Streaming & Scores</h1>
-            <p>Watch live matches, get real-time scores, predictions, and breaking news - All in one place</p>
+        <div class="stats-bar">
+            <div class="stat-card"><div class="stat-number" id="matchesCount">0</div><div>Live Streams</div></div>
+            <div class="stat-card"><div class="stat-number" id="scoresCount">1400+</div><div>Live Scores</div></div>
+            <div class="stat-card"><div class="stat-number" id="predictionsCount">40+</div><div>Predictions</div></div>
         </div>
 
-        <!-- Native Ad Banner -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('streams')"><i class="fas fa-tv"></i> Live Streams</button>
+            <button class="tab-btn" onclick="switchTab('scores')"><i class="fas fa-chart-line"></i> Live Scores</button>
+            <button class="tab-btn" onclick="switchTab('predictions')"><i class="fas fa-chart-simple"></i> Predictions</button>
+            <button class="tab-btn" onclick="switchTab('news')"><i class="fas fa-newspaper"></i> News</button>
+            <button class="tab-btn" onclick="switchTab('search')"><i class="fas fa-search"></i> Search</button>
+        </div>
+
+        <!-- Streams Tab -->
+        <div id="streamsTab"><div id="matchesGrid" class="matches-grid"><div class="loader"></div></div></div>
+
+        <!-- Scores Tab -->
+        <div id="scoresTab" style="display: none;"><div class="standings-table" id="scoresTable"><div class="loader"></div></div></div>
+
+        <!-- Predictions Tab -->
+        <div id="predictionsTab" style="display: none;"><div id="predictionsGrid" class="matches-grid"><div class="loader"></div></div></div>
+
+        <!-- News Tab -->
+        <div id="newsTab" style="display: none;"><div id="newsGrid" class="matches-grid"><div class="loader"></div></div></div>
+
+        <!-- Search Tab -->
+        <div id="searchTab" style="display: none;">
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" id="playerSearchInput" class="search-input" placeholder="Search player (e.g., Ronaldo, Messi, Mbappe)...">
+                    <button class="stream-btn" style="width: auto; padding: 0 1.5rem;" onclick="searchPlayer()"><i class="fas fa-user"></i> Search Player</button>
+                </div>
+                <div class="search-box">
+                    <input type="text" id="teamSearchInput" class="search-input" placeholder="Search team (e.g., Manchester United, Real Madrid)...">
+                    <button class="stream-btn" style="width: auto; padding: 0 1.5rem; background: var(--secondary);" onclick="searchTeam()"><i class="fas fa-users"></i> Search Team</button>
+                </div>
+                <div id="searchResults" class="matches-grid"></div>
+            </div>
+        </div>
+
+        <!-- Native Ad -->
         <div class="native-ad">
             <span class="ad-label">Sponsored</span>
             <div id="container-b26d1487549578016dcb13eeeae72f35"></div>
         </div>
+    </div>
 
-        <div class="stats">
-            <div class="stat-card"><div class="stat-number">64+</div><div class="stat-label">Live Streams</div></div>
-            <div class="stat-card"><div class="stat-number">1400+</div><div class="stat-label">Live Scores</div></div>
-            <div class="stat-card"><div class="stat-number">40+</div><div class="stat-label">Predictions</div></div>
-            <div class="stat-card"><div class="stat-number" id="usersCount">0</div><div class="stat-label">Active Users</div></div>
-        </div>
-
-        <div class="section-title"><i class="fas fa-futbol"></i><h2>⚽ Live Football</h2></div>
-        <div class="tools-grid">
-            <a href="/football.html" class="tool-card"><div class="tool-icon"><i class="fas fa-tv"></i></div><h3>Live Streaming</h3><p>Watch matches live with multiple streams</p></a>
-            <a href="/football.html?tab=scores" class="tool-card"><div class="tool-icon"><i class="fas fa-chart-line"></i></div><h3>Live Scores</h3><p>Real-time updates from 1400+ matches</p></a>
-            <a href="/football.html?tab=predictions" class="tool-card"><div class="tool-icon"><i class="fas fa-chart-simple"></i></div><h3>Match Predictions</h3><p>AI-powered match predictions</p></a>
-            <a href="/football.html?tab=news" class="tool-card"><div class="tool-icon"><i class="fas fa-newspaper"></i></div><h3>Football News</h3><p>Latest headlines and updates</p></a>
-        </div>
-
-        <div class="section-title"><i class="fas fa-trophy"></i><h2>🏆 Standings & Stats</h2></div>
-        <div class="tools-grid">
-            <a href="/standings.html?league=epl" class="tool-card"><div class="tool-icon"><i class="fas fa-trophy"></i></div><h3>Premier League</h3><p>Table & Top Scorers</p></a>
-            <a href="/standings.html?league=laliga" class="tool-card"><div class="tool-icon"><i class="fas fa-trophy"></i></div><h3>La Liga</h3><p>Table & Top Scorers</p></a>
-            <a href="/standings.html?league=bundesliga" class="tool-card"><div class="tool-icon"><i class="fas fa-trophy"></i></div><h3>Bundesliga</h3><p>Table & Top Scorers</p></a>
-            <a href="/standings.html?league=seriea" class="tool-card"><div class="tool-icon"><i class="fas fa-trophy"></i></div><h3>Serie A</h3><p>Table & Top Scorers</p></a>
-        </div>
-
-        <div class="section-title"><i class="fas fa-search"></i><h2>🔍 Player & Team Search</h2></div>
-        <div class="tools-grid">
-            <a href="/football.html?tab=search" class="tool-card"><div class="tool-icon"><i class="fas fa-user"></i></div><h3>Player Search</h3><p>Search any player</p></a>
-            <a href="/football.html?tab=search" class="tool-card"><div class="tool-icon"><i class="fas fa-users"></i></div><h3>Team Search</h3><p>Search any team</p></a>
-        </div>
-
-        <div class="section-title"><i class="fas fa-tools"></i><h2>🛠️ Utility Tools</h2></div>
-        <div class="tools-grid">
-            <a href="/tools.html?tab=qr" class="tool-card"><div class="tool-icon"><i class="fas fa-qrcode"></i></div><h3>QR Code</h3><p>Generate QR codes</p></a>
-            <a href="/tools.html?tab=shorten" class="tool-card"><div class="tool-icon"><i class="fas fa-link"></i></div><h3>URL Shortener</h3><p>Shorten long URLs</p></a>
-            <a href="/tools.html?tab=base64" class="tool-card"><div class="tool-icon"><i class="fas fa-code"></i></div><h3>Base64</h3><p>Encode/Decode</p></a>
-        </div>
-
-        <div class="section-title"><i class="fas fa-robot"></i><h2>🤖 AI Assistant</h2></div>
-        <div class="tools-grid">
-            <a href="/ai.html" class="tool-card"><div class="tool-icon"><i class="fas fa-brain"></i></div><h3>DeepSeek AI</h3><p>Chat with AI</p></a>
-        </div>
-
-        <div class="section-title"><i class="fas fa-phone-alt"></i><h2>📞 Temp Numbers</h2></div>
-        <div class="tools-grid">
-            <a href="/temp-numbers.html" class="tool-card"><div class="tool-icon"><i class="fas fa-mobile-alt"></i></div><h3>Virtual Numbers</h3><p>Receive SMS anonymously</p></a>
-        </div>
-
-        <div class="section-title"><i class="fas fa-cloud-upload-alt"></i><h2>📁 File Upload</h2></div>
-        <div class="tools-grid">
-            <a href="/upload.html" class="tool-card"><div class="tool-icon"><i class="fas fa-upload"></i></div><h3>Catbox Uploader</h3><p>Upload files up to 200MB</p></a>
+    <div id="streamModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><h3 id="modalTitle">Live Stream</h3><button class="close-modal" onclick="closeModal()">&times;</button></div>
+            <div class="video-container"><video id="videoPlayer" controls></video></div>
+            <div id="streamOptions" class="stream-select"></div>
         </div>
     </div>
 
-    <footer class="footer">
-        <p>Made with <i class="fas fa-heart" style="color:#ec4899;"></i> by <strong>Dev Gift</strong> | +2349164624021</p>
-        <p style="margin-top: 0.5rem; font-size: 0.8rem;">© 2026 DEVHUB SPORTS - All rights reserved</p>
-    </footer>
+    <footer class="footer"><p>Made with <i class="fas fa-heart" style="color:#ec4899;"></i> by <strong>Dev Gift</strong> | +2349164624021</p></footer>
 
     <script>
-        // Theme management
+        // Theme
         function setTheme(theme) {
             document.body.className = theme;
             localStorage.setItem('theme', theme);
             document.querySelectorAll('.theme-toggle span').forEach(span => {
                 span.classList.remove('active');
-                if ((theme === 'dark' && span.classList.contains('dark')) ||
-                    (theme === 'light' && span.classList.contains('light'))) {
-                    span.classList.add('active');
-                }
+                if ((theme === 'dark' && span.classList.contains('dark')) || (theme === 'light' && span.classList.contains('light'))) span.classList.add('active');
             });
+        }
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        setTheme(savedTheme);
+        
+        const token = localStorage.getItem('token');
+        let currentStreams = [];
+        let currentVideo = null;
+
+        if (!token) document.getElementById('authStatus').innerHTML = '<a href="/login.html" style="color:#6366f1;">Login to watch</a>';
+        else document.getElementById('authStatus').innerHTML = '<span style="color:#10b981;"><i class="fas fa-check-circle"></i> Ready</span>';
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('streamsTab').style.display = 'none';
+            document.getElementById('scoresTab').style.display = 'none';
+            document.getElementById('predictionsTab').style.display = 'none';
+            document.getElementById('newsTab').style.display = 'none';
+            document.getElementById('searchTab').style.display = 'none';
+            
+            if (tab === 'streams') { document.getElementById('streamsTab').style.display = 'block'; document.querySelector('.tab-btn:nth-child(1)').classList.add('active'); loadMatches(); }
+            else if (tab === 'scores') { document.getElementById('scoresTab').style.display = 'block'; document.querySelector('.tab-btn:nth-child(2)').classList.add('active'); loadScores(); }
+            else if (tab === 'predictions') { document.getElementById('predictionsTab').style.display = 'block'; document.querySelector('.tab-btn:nth-child(3)').classList.add('active'); loadPredictions(); }
+            else if (tab === 'news') { document.getElementById('newsTab').style.display = 'block'; document.querySelector('.tab-btn:nth-child(4)').classList.add('active'); loadNews(); }
+            else if (tab === 'search') { document.getElementById('searchTab').style.display = 'block'; document.querySelector('.tab-btn:nth-child(5)').classList.add('active'); }
+        }
+
+        async function loadMatches() {
+            try {
+                const res = await fetch('/api/matches');
+                const data = await res.json();
+                if (data.success && data.result) {
+                    const matches = data.result.matches;
+                    document.getElementById('matchesCount').innerText = matches.length;
+                    document.getElementById('matchesGrid').innerHTML = matches.map(m => `
+                        <div class="match-card" onclick="openStream('${m.id}', '${m.homeTeam} vs ${m.awayTeam}', ${JSON.stringify(m.streams).replace(/"/g, '&quot;')})">
+                            <div class="match-header"><span class="league">${m.league}</span><span class="status ${m.status.toLowerCase()}">${m.status}</span></div>
+                            <div class="match-body"><div class="team"><img src="${m.homeLogo}" class="team-logo" onerror="this.src='https://via.placeholder.com/60'"><div class="team-name">${m.homeTeam}</div></div><div class="score">${m.homeScore} - ${m.awayScore}</div><div class="team"><img src="${m.awayLogo}" class="team-logo" onerror="this.src='https://via.placeholder.com/60'"><div class="team-name">${m.awayTeam}</div></div></div>
+                            <div class="match-footer"><button class="stream-btn"><i class="fas fa-play"></i> Watch Live</button></div>
+                        </div>
+                    `).join('');
+                }
+            } catch(e) { document.getElementById('matchesGrid').innerHTML = '<p>Failed to load matches</p>'; }
+        }
+
+        async function loadScores() {
+            try {
+                const res = await fetch('/api/livescores');
+                const data = await res.json();
+                const matches = data.result?.matches || [];
+                document.getElementById('scoresTable').innerHTML = `</table><thead><tr><th>Home</th><th>Score</th><th>Away</th><th>League</th><th>Status</th></tr></thead><tbody>${matches.slice(0, 50).map(m => `<tr><td>${m.homeTeam}</td><td><strong>${m.homeScore} - ${m.awayScore}</strong></td><td>${m.awayTeam}</td><td>${m.league}</td><td>${m.status}</td></tr>`).join('')}</tbody></table>`;
+            } catch(e) { document.getElementById('scoresTable').innerHTML = '<p>Failed to load scores</p>'; }
+        }
+
+        async function loadPredictions() {
+            try {
+                const res = await fetch('/api/predictions');
+                const data = await res.json();
+                const predictions = data.result || [];
+                document.getElementById('predictionsCount').innerText = predictions.length;
+                document.getElementById('predictionsGrid').innerHTML = predictions.map(p => `
+                    <div class="prediction-card">
+                        <div class="match-header"><span class="league">${p.league}</span><span class="status">${p.time}</span></div>
+                        <h3 style="margin: 1rem 0;">${p.match}</h3>
+                        <div class="prediction-stats">
+                            <div class="prediction-stat"><div class="prediction-value">${p.predictions?.fulltime?.home || 0}%</div><div>Home Win</div></div>
+                            <div class="prediction-stat"><div class="prediction-value">${p.predictions?.fulltime?.draw || 0}%</div><div>Draw</div></div>
+                            <div class="prediction-stat"><div class="prediction-value">${p.predictions?.fulltime?.away || 0}%</div><div>Away Win</div></div>
+                        </div>
+                        <div class="prediction-stats">
+                            <div class="prediction-stat"><div>Over 2.5</div><div class="prediction-value">${p.predictions?.over_2_5?.yes || 0}%</div></div>
+                            <div class="prediction-stat"><div>BTTS</div><div class="prediction-value">${p.predictions?.bothTeamToScore?.yes || 0}%</div></div>
+                            ${p.predictions?.value_bets ? `<div class="prediction-stat"><span class="value-bet">🔥 Value Bet</span></div>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            } catch(e) { document.getElementById('predictionsGrid').innerHTML = '<p>Failed to load predictions</p>'; }
+        }
+
+        async function loadNews() {
+            try {
+                const res = await fetch('/api/news');
+                const data = await res.json();
+                const items = data.result?.data?.items || [];
+                document.getElementById('newsGrid').innerHTML = items.map(n => `
+                    <div class="news-card">
+                        <img src="${n.cover?.url || 'https://via.placeholder.com/400x200'}" class="news-image" onerror="this.src='https://via.placeholder.com/400x200'">
+                        <div class="news-content">
+                            <h4 class="news-title">${n.title}</h4>
+                            <p class="news-summary">${n.summary}</p>
+                            <small class="news-time"><i class="far fa-clock"></i> ${new Date(parseInt(n.createdAt)).toLocaleDateString()}</small>
+                        </div>
+                    </div>
+                `).join('');
+            } catch(e) { document.getElementById('newsGrid').innerHTML = '<p>Failed to load news</p>'; }
+        }
+
+        async function searchPlayer() {
+            const name = document.getElementById('playerSearchInput').value.trim();
+            if (!name) { alert('Enter player name'); return; }
+            const resultsDiv = document.getElementById('searchResults');
+            resultsDiv.innerHTML = '<div class="loader"></div>';
+            try {
+                const res = await fetch(`/api/search/player?name=${encodeURIComponent(name)}`);
+                const data = await res.json();
+                if (data.result && data.result.length) {
+                    resultsDiv.innerHTML = data.result.map(p => `
+                        <div class="player-card">
+                            <img src="${p.cutout || p.thumbnail || 'https://via.placeholder.com/70'}" class="player-avatar" onerror="this.src='https://via.placeholder.com/70'">
+                            <div class="player-info">
+                                <div class="player-name">${p.name}</div>
+                                <div class="player-detail"><i class="fas fa-futbol"></i> ${p.team || 'N/A'}</div>
+                                <div class="player-detail"><i class="fas fa-map-marker-alt"></i> ${p.position || 'N/A'} | ${p.nationality || 'N/A'}</div>
+                                <div class="player-detail"><i class="fas fa-calendar"></i> Born: ${p.birthDate ? new Date(p.birthDate).toLocaleDateString() : 'N/A'}</div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else { resultsDiv.innerHTML = '<p>No players found</p>'; }
+            } catch(e) { resultsDiv.innerHTML = '<p>Search failed</p>'; }
+        }
+
+        async function searchTeam() {
+            const name = document.getElementById('teamSearchInput').value.trim();
+            if (!name) { alert('Enter team name'); return; }
+            const resultsDiv = document.getElementById('searchResults');
+            resultsDiv.innerHTML = '<div class="loader"></div>';
+            try {
+                const res = await fetch(`/api/search/team?name=${encodeURIComponent(name)}`);
+                const data = await res.json();
+                if (data.result && data.result.length) {
+                    resultsDiv.innerHTML = data.result.map(t => `
+                        <div class="player-card">
+                            <img src="${t.thumbnail || 'https://via.placeholder.com/70'}" class="player-avatar" onerror="this.src='https://via.placeholder.com/70'">
+                            <div class="player-info">
+                                <div class="player-name">${t.name}</div>
+                                <div class="player-detail"><i class="fas fa-trophy"></i> ${t.league || 'N/A'}</div>
+                                <div class="player-detail"><i class="fas fa-globe"></i> ${t.country || 'N/A'}</div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else { resultsDiv.innerHTML = '<p>No teams found</p>'; }
+            } catch(e) { resultsDiv.innerHTML = '<p>Search failed</p>'; }
+        }
+
+        function openStream(id, title, streams) {
+            currentStreams = streams;
+            document.getElementById('modalTitle').innerHTML = title;
+            document.getElementById('streamOptions').innerHTML = streams.map((s,i) => `<button class="stream-option ${i===0?'active':''}" onclick="loadStream(${i})">${s.title}</button>`).join('');
+            document.getElementById('streamModal').classList.add('active');
+            loadStream(0);
             if (token) {
-                fetch('/api/profile', {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                    body: JSON.stringify({ theme })
-                }).catch(e => console.log);
+                fetch('/api/watch-history', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ matchId: id, matchTitle: title }) }).catch(e=>{});
             }
         }
 
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        setTheme(savedTheme);
-
-        // Auth
-        const token = localStorage.getItem('token');
-        if (token) {
-            document.getElementById('authButtons').style.display = 'none';
-            document.getElementById('userMenu').style.display = 'flex';
-            fetch('/api/me', { headers: { 'Authorization': `Bearer ${token}` } })
-                .then(res => res.json())
-                .then(user => {
-                    if (user.username) document.getElementById('usernameDisplay').innerHTML = `<i class="fas fa-user-circle"></i> ${user.username}`;
-                    if (user.role === 'admin') document.getElementById('adminLink').style.display = 'inline';
-                    if (user.theme) setTheme(user.theme);
-                })
-                .catch(() => {});
-            fetch('/api/admin/stats', { headers: { 'Authorization': `Bearer ${token}` } })
-                .then(res => res.json())
-                .then(stats => { if (stats.totalUsers) document.getElementById('usersCount').innerText = stats.totalUsers; })
-                .catch(() => {});
+        function loadStream(index) {
+            const stream = currentStreams[index];
+            const video = document.getElementById('videoPlayer');
+            document.querySelectorAll('.stream-option').forEach((btn,i) => i===index ? btn.classList.add('active') : btn.classList.remove('active'));
+            const url = stream.url;
+            if (url.includes('.m3u8')) {
+                if (Hls.isSupported()) {
+                    if (currentVideo) currentVideo.destroy();
+                    currentVideo = new Hls();
+                    currentVideo.loadSource(url);
+                    currentVideo.attachMedia(video);
+                    currentVideo.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+                } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                    video.src = url;
+                    video.addEventListener('loadedmetadata', () => video.play());
+                }
+            } else { video.src = url; video.play(); }
         }
 
-        function logout() { localStorage.removeItem('token'); window.location.reload(); }
-        
-        // Toast notification
-        function showToast(message, type = 'success') {
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}" style="margin-right: 0.5rem;"></i> ${message}`;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
+        function closeModal() {
+            document.getElementById('streamModal').classList.remove('active');
+            const video = document.getElementById('videoPlayer');
+            video.pause();
+            video.src = '';
+            if (currentVideo) { currentVideo.destroy(); currentVideo = null; }
         }
+
+        // Load default
+        loadMatches();
     </script>
 </body>
 </html>
