@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - DEVHUB</title>
+    
+    <!-- ADSTERRA POPUNDER -->
+    <script src="https://pl29464105.effectivecpmnetwork.com/1b/a8/38/1ba838ed76bc22378f33cccb731d8356.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .login-container {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 32px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 450px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .logo { text-align: center; font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 2rem; }
+        h2 { text-align: center; margin-bottom: 2rem; color: white; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: block; margin-bottom: 0.5rem; color: #94a3b8; }
+        .input-group input { width: 100%; padding: 1rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; font-size: 1rem; }
+        .input-group input:focus { outline: none; border-color: #6366f1; }
+        .btn { width: 100%; padding: 1rem; background: linear-gradient(135deg, #6366f1, #4f46e5); border: none; border-radius: 12px; color: white; font-size: 1rem; font-weight: 600; cursor: pointer; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(99,102,241,0.4); }
+        .register-link { text-align: center; margin-top: 1.5rem; color: #94a3b8; }
+        .register-link a { color: #6366f1; text-decoration: none; }
+        .error { background: rgba(239,68,68,0.2); border: 1px solid #ef4444; padding: 0.75rem; border-radius: 8px; color: #ef4444; margin-bottom: 1rem; text-align: center; display: none; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">DEVHUB</div>
+        <h2>Welcome Back</h2>
+        <div id="errorMsg" class="error"></div>
+        <form onsubmit="login(event)">
+            <div class="input-group"><label>Email</label><input type="email" id="email" required placeholder="Enter your email"></div>
+            <div class="input-group"><label>Password</label><input type="password" id="password" required placeholder="Enter your password"></div>
+            <button type="submit" class="btn">Login</button>
+        </form>
+        <div class="register-link">Don't have an account? <a href="/register.html">Sign up</a></div>
+    </div>
+    <script>
+        async function login(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            try {
+                const res = await fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
+                const data = await res.json();
+                if (data.success) { localStorage.setItem('token', data.token); window.location.href = '/'; }
+                else { document.getElementById('errorMsg').style.display = 'block'; document.getElementById('errorMsg').textContent = data.error || 'Login failed'; }
+            } catch (error) { document.getElementById('errorMsg').style.display = 'block'; document.getElementById('errorMsg').textContent = 'Network error'; }
+        }
+    </script>
+</body>
+</html>
