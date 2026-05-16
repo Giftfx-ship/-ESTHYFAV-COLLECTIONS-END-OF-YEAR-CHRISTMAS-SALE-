@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Standings - DEVHUB SPORTS</title>
+    
+    <script src="https://penguinsincequalify.com/f4/63/a7/f463a78a655d5b6a10eaeec7146802e9.js"></script>
+    <script async="async" data-cfasync="false" src="https://penguinsincequalify.com/b26d1487549578016dcb13eeeae72f35/invoke.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root { --primary: #6366f1; --primary-dark: #4f46e5; --secondary: #ec4899; --success: #10b981; }
+        
+        body.dark { --bg-primary: #0a0a0f; --bg-card: rgba(255,255,255,0.05); --text-primary: #f1f5f9; --text-secondary: #94a3b8; --border: rgba(255,255,255,0.1); }
+        body.light { --bg-primary: #f8fafc; --bg-card: rgba(0,0,0,0.03); --text-primary: #0f172a; --text-secondary: #475569; --border: rgba(0,0,0,0.08); }
+        
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); transition: all 0.3s; }
+        
+        .navbar { background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 1rem 2rem; position: sticky; top: 0; z-index: 100; }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .logo { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; font-family: 'Space Grotesk', monospace; }
+        .back-btn { color: var(--text-secondary); text-decoration: none; }
+        
+        .theme-toggle { background: var(--bg-card); border: 1px solid var(--border); border-radius: 40px; padding: 0.25rem; display: flex; gap: 0.25rem; }
+        .theme-toggle span { padding: 0.3rem 0.8rem; border-radius: 30px; font-size: 0.8rem; cursor: pointer; }
+        .theme-toggle span.active { background: var(--primary); color: white; }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        
+        .league-selector { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; justify-content: center; }
+        .league-btn { padding: 0.7rem 1.5rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 40px; color: var(--text-primary); cursor: pointer; transition: all 0.3s; font-weight: 500; }
+        .league-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        
+        .section-title { font-size: 1.5rem; font-weight: 700; margin: 2rem 0 1rem; display: flex; align-items: center; gap: 0.5rem; font-family: 'Space Grotesk', monospace; }
+        .section-title i { color: var(--primary); }
+        
+        .standings-table { width: 100%; background: var(--bg-card); border-radius: 16px; overflow: auto; margin-bottom: 2rem; }
+        .standings-table table { width: 100%; border-collapse: collapse; }
+        .standings-table th, .standings-table td { padding: 0.8rem; text-align: left; border-bottom: 1px solid var(--border); }
+        .standings-table th { background: rgba(0,0,0,0.2); color: var(--text-secondary); font-weight: 600; font-size: 0.8rem; }
+        .standings-table tr:hover { background: var(--bg-card-hover); }
+        
+        .loader { width: 50px; height: 50px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 2rem auto; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .native-ad { background: var(--bg-card); border-radius: 16px; margin: 2rem 0; padding: 1rem; text-align: center; border: 1px solid var(--border); }
+        .ad-label { font-size: 10px; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 8px; display: block; }
+        
+        .footer { background: var(--bg-card); border-top: 1px solid var(--border); padding: 2rem; text-align: center; margin-top: 4rem; }
+        
+        @media (max-width: 768px) { .standings-table th, .standings-table td { padding: 0.5rem; font-size: 0.75rem; } .league-btn { padding: 0.5rem 1rem; font-size: 0.8rem; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+            <div class="logo">🏆 League Standings</div>
+            <div class="theme-toggle" id="themeToggle">
+                <span class="dark active" onclick="setTheme('dark')"><i class="fas fa-moon"></i></span>
+                <span class="light" onclick="setTheme('light')"><i class="fas fa-sun"></i></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="league-selector">
+            <button class="league-btn active" onclick="loadLeague('epl')"><i class="fas fa-futbol"></i> Premier League</button>
+            <button class="league-btn" onclick="loadLeague('laliga')"><i class="fas fa-futbol"></i> La Liga</button>
+            <button class="league-btn" onclick="loadLeague('bundesliga')"><i class="fas fa-futbol"></i> Bundesliga</button>
+            <button class="league-btn" onclick="loadLeague('seriea')"><i class="fas fa-futbol"></i> Serie A</button>
+            <button class="league-btn" onclick="loadLeague('ligue1')"><i class="fas fa-futbol"></i> Ligue 1</button>
+            <button class="league-btn" onclick="loadLeague('ucl')"><i class="fas fa-trophy"></i> Champions League</button>
+        </div>
+
+        <div class="section-title"><i class="fas fa-trophy"></i><h2 id="leagueTitle">Premier League</h2></div>
+        <div id="standingsContainer" class="standings-table"><div class="loader"></div></div>
+
+        <div class="section-title"><i class="fas fa-futbol"></i><h2>Top Scorers</h2></div>
+        <div id="scorersContainer" class="standings-table"><div class="loader"></div></div>
+
+        <div class="native-ad"><span class="ad-label">Sponsored</span><div id="container-b26d1487549578016dcb13eeeae72f35"></div></div>
+    </div>
+
+    <footer class="footer"><p>Made with <i class="fas fa-heart" style="color:#ec4899;"></i> by <strong>Dev Gift</strong> | +2349164624021</p></footer>
+
+    <script>
+        function setTheme(theme) {
+            document.body.className = theme;
+            localStorage.setItem('theme', theme);
+            document.querySelectorAll('.theme-toggle span').forEach(span => {
+                span.classList.remove('active');
+                if ((theme === 'dark' && span.classList.contains('dark')) || (theme === 'light' && span.classList.contains('light'))) span.classList.add('active');
+            });
+        }
+        setTheme(localStorage.getItem('theme') || 'dark');
+
+        const leagueNames = { epl: 'Premier League', laliga: 'La Liga', bundesliga: 'Bundesliga', seriea: 'Serie A', ligue1: 'Ligue 1', ucl: 'Champions League' };
+
+        async function loadLeague(league) {
+            document.querySelectorAll('.league-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('leagueTitle').innerHTML = leagueNames[league];
+            
+            document.getElementById('standingsContainer').innerHTML = '<div class="loader"></div>';
+            document.getElementById('scorersContainer').innerHTML = '<div class="loader"></div>';
+            
+            try {
+                const [standingsRes, scorersRes] = await Promise.all([
+                    fetch(`/api/standings/${league}`),
+                    fetch(`/api/scorers/${league}`)
+                ]);
+                const standings = await standingsRes.json();
+                const scorers = await scorersRes.json();
+                
+                if (standings.result && standings.result.length) {
+                    document.getElementById('standingsContainer').innerHTML = `<table><thead><tr><th>#</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th></tr></thead><tbody>${standings.result.map((t,i) => `<tr><td><strong>${i+1}</strong></td><td>${t.team}</td><td>${t.played}</td><td>${t.wins}</td><td>${t.draws}</td><td>${t.losses}</td><td>${t.goalsFor}</td><td>${t.goalsAgainst}</td><td>${t.goalDiff}</td><td><strong>${t.points}</strong></td></tr>`).join('')}</tbody></table>`;
+                } else { document.getElementById('standingsContainer').innerHTML = '<p>No standings available</p>'; }
+                
+                if (scorers.result && scorers.result.length) {
+                    document.getElementById('scorersContainer').innerHTML = `<tr><thead><tr><th>#</th><th>Player</th><th>Team</th><th>Goals</th></tr></thead><tbody>${scorers.result.slice(0, 20).map((p,i) => `<tr><td><strong>${i+1}</strong></td><td>${p.player}</td><td>${p.team}</td><td><strong>${p.goals}</strong></td></tr>`).join('')}</tbody></table>`;
+                } else { document.getElementById('scorersContainer').innerHTML = '<p>No scorers available</p>'; }
+            } catch(e) { document.getElementById('standingsContainer').innerHTML = '<p>Failed to load data</p>'; }
+        }
+        
+        loadLeague('epl');
+    </script>
+</body>
+</html>
