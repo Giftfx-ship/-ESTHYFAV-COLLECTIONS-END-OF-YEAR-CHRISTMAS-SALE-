@@ -16,82 +16,70 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #ec4899;
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #8b5cf6;
             --success: #10b981;
             --danger: #ef4444;
             --warning: #f59e0b;
         }
         
         body.dark {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121a;
-            --bg-card: rgba(255,255,255,0.05);
+            --bg-primary: #0f0f1a;
+            --bg-secondary: #1a1a2e;
+            --bg-card: #1e1e2e;
+            --bg-card-hover: #2a2a3a;
             --text-primary: #f1f5f9;
             --text-secondary: #94a3b8;
-            --border: rgba(255,255,255,0.1);
+            --border: #2a2a3a;
         }
         
         body.light {
             --bg-primary: #f8fafc;
             --bg-secondary: #ffffff;
-            --bg-card: rgba(0,0,0,0.03);
+            --bg-card: #ffffff;
+            --bg-card-hover: #f1f5f9;
             --text-primary: #0f172a;
             --text-secondary: #475569;
-            --border: rgba(0,0,0,0.08);
+            --border: #e2e8f0;
         }
         
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
-            min-height: 100vh;
             transition: all 0.3s ease;
         }
         
         /* Navbar */
         .navbar {
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(20px);
+            background: var(--bg-secondary);
             border-bottom: 1px solid var(--border);
             padding: 1rem 2rem;
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
         }
         .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-        .logo { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; font-family: 'Space Grotesk', monospace; }
+        .logo { font-size: 1.5rem; font-weight: 700; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; font-family: 'Space Grotesk', monospace; }
         .back-btn { color: var(--text-secondary); text-decoration: none; transition: color 0.3s; }
         .back-btn:hover { color: var(--primary); }
         
-        .theme-toggle {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 40px;
-            padding: 0.25rem;
-            cursor: pointer;
-            display: flex;
-            gap: 0.25rem;
-        }
-        .theme-toggle span {
-            padding: 0.3rem 0.8rem;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
+        .theme-toggle { background: var(--bg-card); border: 1px solid var(--border); border-radius: 40px; padding: 0.25rem; display: flex; gap: 0.25rem; }
+        .theme-toggle span { padding: 0.3rem 0.8rem; border-radius: 30px; font-size: 0.8rem; cursor: pointer; transition: all 0.3s; }
         .theme-toggle span.active { background: var(--primary); color: white; }
         
         .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
         
         /* Stats Bar */
-        .stats-bar { display: flex; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
-        .stat-card { background: var(--bg-card); padding: 1rem 1.5rem; border-radius: 16px; border: 1px solid var(--border); }
-        .stat-number { font-size: 2rem; font-weight: 800; color: var(--primary); font-family: 'Space Grotesk', monospace; }
+        .stats-bar { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .stat-card { background: var(--bg-card); padding: 1rem 1.5rem; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .stat-number { font-size: 2rem; font-weight: 700; color: var(--primary); font-family: 'Space Grotesk', monospace; }
+        .stat-label { font-size: 0.8rem; color: var(--text-secondary); }
         
         /* Tabs */
-        .tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+        .tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
         .tab-btn { background: none; border: none; color: var(--text-secondary); padding: 0.6rem 1.3rem; cursor: pointer; font-size: 0.9rem; transition: all 0.3s; border-radius: 40px; font-weight: 500; }
         .tab-btn.active { background: var(--primary); color: white; }
         
@@ -99,106 +87,84 @@
         .matches-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem; }
         .match-card {
             background: var(--bg-card);
-            border-radius: 20px;
+            border-radius: 16px;
             border: 1px solid var(--border);
             overflow: hidden;
             cursor: pointer;
             transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        .match-card:hover { transform: translateY(-5px); border-color: var(--primary); }
-        .match-header { padding: 1rem; background: rgba(0,0,0,0.3); display: flex; justify-content: space-between; }
-        .league { color: var(--primary); font-weight: 600; font-size: 0.8rem; }
-        .status { padding: 0.25rem 0.75rem; border-radius: 20px; background: var(--success); font-size: 0.75rem; font-weight: 600; color: white; }
-        .status.finished { background: var(--text-secondary); }
-        .match-body { padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+        .match-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.1); border-color: var(--primary); }
+        .match-header { padding: 0.8rem 1rem; background: var(--bg-card-hover); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+        .league { color: var(--primary); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .status { padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
+        .status.live { background: var(--danger); color: white; animation: pulse 1.5s infinite; }
+        .status.halftime { background: var(--warning); color: #1a1a2e; }
+        .status.fulltime, .status.finished { background: var(--text-secondary); color: white; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        
+        .match-body { padding: 1rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
         .team { text-align: center; flex: 1; }
-        .team-logo { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-bottom: 0.5rem; }
-        .team-name { font-weight: 600; font-size: 0.9rem; }
-        .score { font-size: 1.8rem; font-weight: 800; color: var(--primary); font-family: 'Space Grotesk', monospace; }
-        .match-footer { padding: 1rem; border-top: 1px solid var(--border); }
-        .stream-btn { background: var(--primary); color: white; border: none; padding: 0.6rem 1rem; border-radius: 12px; cursor: pointer; width: 100%; font-weight: 600; transition: all 0.3s; }
-        .stream-btn:hover { background: var(--primary-dark); transform: scale(0.98); }
+        .team-logo { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-bottom: 0.5rem; background: white; padding: 5px; }
+        .team-name { font-weight: 600; font-size: 0.85rem; }
+        .score { font-size: 1.5rem; font-weight: 800; color: var(--primary); font-family: 'Space Grotesk', monospace; padding: 0 0.5rem; }
+        .match-footer { padding: 0.8rem 1rem; border-top: 1px solid var(--border); background: var(--bg-card-hover); }
+        .stream-btn { background: var(--primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 10px; cursor: pointer; width: 100%; font-weight: 600; transition: all 0.3s; }
+        .stream-btn:hover { background: var(--primary-dark); }
+        
+        /* Live Scores Table */
+        .scores-table { background: var(--bg-card); border-radius: 16px; overflow: hidden; border: 1px solid var(--border); }
+        .scores-table table { width: 100%; border-collapse: collapse; }
+        .scores-table th { padding: 1rem; text-align: left; background: var(--bg-card-hover); color: var(--text-secondary); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+        .scores-table td { padding: 0.8rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+        .scores-table tr:hover { background: var(--bg-card-hover); }
+        .score-cell { font-weight: 700; color: var(--primary); font-size: 1rem; }
+        .live-badge { background: var(--danger); color: white; padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.7rem; font-weight: 600; }
+        .halftime-badge { background: var(--warning); color: #1a1a2e; padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.7rem; font-weight: 600; }
         
         /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.95);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; }
         .modal.active { display: flex; }
-        .modal-content { width: 90%; max-width: 1000px; background: var(--bg-primary); border-radius: 24px; overflow: hidden; border: 1px solid var(--border); }
-        .modal-header { padding: 1rem; background: var(--bg-card); display: flex; justify-content: space-between; align-items: center; }
+        .modal-content { width: 90%; max-width: 1000px; background: var(--bg-primary); border-radius: 20px; overflow: hidden; border: 1px solid var(--border); }
+        .modal-header { padding: 1rem; background: var(--bg-card); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; }
         .video-container video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        .stream-select { padding: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
-        .stream-option { padding: 0.5rem 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; color: var(--text-primary); cursor: pointer; transition: all 0.3s; }
+        .stream-select { padding: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; background: var(--bg-card); }
+        .stream-option { padding: 0.5rem 1rem; background: var(--bg-card-hover); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); cursor: pointer; transition: all 0.3s; }
         .stream-option.active { background: var(--primary); color: white; border-color: var(--primary); }
         .close-modal { background: none; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; }
         
-        /* Predictions Card */
-        .prediction-card {
-            background: var(--bg-card);
-            border-radius: 20px;
-            padding: 1.5rem;
-            border: 1px solid var(--border);
-        }
-        .prediction-stats { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; }
-        .prediction-stat { flex: 1; text-align: center; padding: 0.8rem; background: rgba(0,0,0,0.2); border-radius: 12px; }
-        .prediction-value { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
-        .value-bet { background: var(--warning); color: #1a1a2e; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-weight: bold; }
+        /* Predictions */
+        .prediction-card { background: var(--bg-card); border-radius: 16px; padding: 1.2rem; border: 1px solid var(--border); }
+        .prediction-stats { display: flex; gap: 0.8rem; margin-top: 1rem; flex-wrap: wrap; }
+        .prediction-stat { flex: 1; text-align: center; padding: 0.6rem; background: var(--bg-card-hover); border-radius: 12px; }
+        .prediction-value { font-size: 1.2rem; font-weight: 700; color: var(--primary); }
         
-        /* News Card */
-        .news-card {
-            background: var(--bg-card);
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            transition: all 0.3s;
-        }
-        .news-card:hover { transform: translateY(-3px); }
-        .news-image { width: 100%; height: 180px; object-fit: cover; }
+        /* News */
+        .news-card { background: var(--bg-card); border-radius: 16px; overflow: hidden; border: 1px solid var(--border); transition: all 0.3s; }
+        .news-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .news-image { width: 100%; height: 160px; object-fit: cover; }
         .news-content { padding: 1rem; }
-        .news-title { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; line-height: 1.3; }
+        .news-title { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; line-height: 1.4; }
         .news-summary { font-size: 0.8rem; color: var(--text-secondary); }
-        .news-time { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.5rem; display: block; }
+        .news-time { font-size: 0.7rem; color: var(--text-secondary); margin-top: 0.5rem; display: block; }
         
-        /* Player Search */
+        /* Search */
         .search-container { margin-bottom: 2rem; }
         .search-box { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
         .search-input { flex: 1; padding: 0.8rem 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; color: var(--text-primary); font-size: 1rem; }
         .search-input:focus { outline: none; border-color: var(--primary); }
-        .player-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 1rem;
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            border: 1px solid var(--border);
-            transition: all 0.3s;
-        }
-        .player-card:hover { border-color: var(--primary); }
-        .player-avatar { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; }
-        .player-info { flex: 1; }
-        .player-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.3rem; }
-        .player-detail { font-size: 0.8rem; color: var(--text-secondary); }
-        
-        /* Standings Table */
-        .standings-table { width: 100%; background: var(--bg-card); border-radius: 16px; overflow: auto; }
-        .standings-table table { width: 100%; border-collapse: collapse; }
-        .standings-table th, .standings-table td { padding: 0.8rem; text-align: left; border-bottom: 1px solid var(--border); }
-        .standings-table th { background: rgba(0,0,0,0.2); color: var(--text-secondary); font-weight: 600; font-size: 0.8rem; }
-        .standings-table tr:hover { background: var(--bg-card-hover); }
+        .player-card { background: var(--bg-card); border-radius: 16px; padding: 1rem; display: flex; gap: 1rem; align-items: center; border: 1px solid var(--border); transition: all 0.3s; }
+        .player-card:hover { border-color: var(--primary); transform: translateX(5px); }
+        .player-avatar { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
+        .player-name { font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
+        .player-detail { font-size: 0.75rem; color: var(--text-secondary); }
         
         .loader { width: 50px; height: 50px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 2rem auto; }
         @keyframes spin { to { transform: rotate(360deg); } }
         
         .native-ad { background: var(--bg-card); border-radius: 16px; margin: 2rem 0; padding: 1rem; text-align: center; border: 1px solid var(--border); }
-        .ad-label { font-size: 10px; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 8px; display: block; }
+        .ad-label { font-size: 10px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
         
         .footer { background: var(--bg-card); border-top: 1px solid var(--border); padding: 2rem; text-align: center; margin-top: 4rem; }
         
@@ -206,9 +172,10 @@
             .matches-grid { grid-template-columns: 1fr; }
             .tabs { gap: 0.3rem; }
             .tab-btn { padding: 0.4rem 0.9rem; font-size: 0.75rem; }
-            .stats-bar { flex-direction: column; }
-            .team-logo { width: 45px; height: 45px; }
-            .score { font-size: 1.3rem; }
+            .team-logo { width: 40px; height: 40px; }
+            .team-name { font-size: 0.75rem; }
+            .score { font-size: 1.2rem; }
+            .scores-table th, .scores-table td { padding: 0.5rem; font-size: 0.7rem; }
         }
     </style>
 </head>
@@ -219,8 +186,8 @@
             <div class="logo">⚽ Live Football Hub</div>
             <div style="display: flex; gap: 1rem; align-items: center;">
                 <div class="theme-toggle" id="themeToggle">
-                    <span class="dark active" onclick="setTheme('dark')"><i class="fas fa-moon"></i></span>
-                    <span class="light" onclick="setTheme('light')"><i class="fas fa-sun"></i></span>
+                    <span class="dark active" onclick="setTheme('dark')"><i class="fas fa-moon"></i> Dark</span>
+                    <span class="light" onclick="setTheme('light')"><i class="fas fa-sun"></i> Light</span>
                 </div>
                 <div id="authStatus"></div>
             </div>
@@ -229,49 +196,43 @@
 
     <div class="container">
         <div class="stats-bar">
-            <div class="stat-card"><div class="stat-number" id="matchesCount">0</div><div>Live Streams</div></div>
-            <div class="stat-card"><div class="stat-number" id="scoresCount">1400+</div><div>Live Scores</div></div>
-            <div class="stat-card"><div class="stat-number" id="predictionsCount">40+</div><div>Predictions</div></div>
+            <div class="stat-card"><div class="stat-number" id="matchesCount">0</div><div class="stat-label">Live Streams</div></div>
+            <div class="stat-card"><div class="stat-number" id="scoresCount">0</div><div class="stat-label">Live Scores</div></div>
+            <div class="stat-card"><div class="stat-number" id="predictionsCount">0</div><div class="stat-label">Predictions</div></div>
         </div>
 
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('streams')"><i class="fas fa-tv"></i> Live Streams</button>
-            <button class="tab-btn" onclick="switchTab('scores')"><i class="fas fa-chart-line"></i> Live Scores</button>
-            <button class="tab-btn" onclick="switchTab('predictions')"><i class="fas fa-chart-simple"></i> Predictions</button>
+            <button class="tab-btn" onclick="switchTab('scores')"><i class="fas fa-table"></i> Live Scores</button>
+            <button class="tab-btn" onclick="switchTab('predictions')"><i class="fas fa-chart-line"></i> Predictions</button>
             <button class="tab-btn" onclick="switchTab('news')"><i class="fas fa-newspaper"></i> News</button>
             <button class="tab-btn" onclick="switchTab('search')"><i class="fas fa-search"></i> Search</button>
         </div>
 
-        <!-- Streams Tab -->
         <div id="streamsTab"><div id="matchesGrid" class="matches-grid"><div class="loader"></div></div></div>
 
-        <!-- Scores Tab -->
-        <div id="scoresTab" style="display: none;"><div class="standings-table" id="scoresTable"><div class="loader"></div></div></div>
+        <div id="scoresTab" style="display: none;"><div id="scoresTable" class="scores-table"><div class="loader"></div></div></div>
 
-        <!-- Predictions Tab -->
         <div id="predictionsTab" style="display: none;"><div id="predictionsGrid" class="matches-grid"><div class="loader"></div></div></div>
 
-        <!-- News Tab -->
         <div id="newsTab" style="display: none;"><div id="newsGrid" class="matches-grid"><div class="loader"></div></div></div>
 
-        <!-- Search Tab -->
         <div id="searchTab" style="display: none;">
             <div class="search-container">
                 <div class="search-box">
-                    <input type="text" id="playerSearchInput" class="search-input" placeholder="Search player (e.g., Ronaldo, Messi, Mbappe)...">
-                    <button class="stream-btn" style="width: auto; padding: 0 1.5rem;" onclick="searchPlayer()"><i class="fas fa-user"></i> Search Player</button>
+                    <input type="text" id="playerSearchInput" class="search-input" placeholder="🔍 Search player (e.g., Ronaldo, Messi, Mbappe)...">
+                    <button class="stream-btn" style="width: auto; padding: 0.8rem 1.5rem;" onclick="searchPlayer()"><i class="fas fa-user"></i> Search Player</button>
                 </div>
                 <div class="search-box">
-                    <input type="text" id="teamSearchInput" class="search-input" placeholder="Search team (e.g., Manchester United, Real Madrid)...">
-                    <button class="stream-btn" style="width: auto; padding: 0 1.5rem; background: var(--secondary);" onclick="searchTeam()"><i class="fas fa-users"></i> Search Team</button>
+                    <input type="text" id="teamSearchInput" class="search-input" placeholder="🔍 Search team (e.g., Manchester United, Real Madrid)...">
+                    <button class="stream-btn" style="width: auto; padding: 0.8rem 1.5rem; background: var(--secondary);" onclick="searchTeam()"><i class="fas fa-users"></i> Search Team</button>
                 </div>
                 <div id="searchResults" class="matches-grid"></div>
             </div>
         </div>
 
-        <!-- Native Ad -->
         <div class="native-ad">
-            <span class="ad-label">Sponsored</span>
+            <span class="ad-label">Advertisement</span>
             <div id="container-b26d1487549578016dcb13eeeae72f35"></div>
         </div>
     </div>
@@ -279,7 +240,7 @@
     <div id="streamModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><h3 id="modalTitle">Live Stream</h3><button class="close-modal" onclick="closeModal()">&times;</button></div>
-            <div class="video-container"><video id="videoPlayer" controls></video></div>
+            <div class="video-container"><video id="videoPlayer" controls autoplay></video></div>
             <div id="streamOptions" class="stream-select"></div>
         </div>
     </div>
@@ -287,7 +248,6 @@
     <footer class="footer"><p>Made with <i class="fas fa-heart" style="color:#ec4899;"></i> by <strong>Dev Gift</strong> | +2349164624021</p></footer>
 
     <script>
-        // Theme
         function setTheme(theme) {
             document.body.className = theme;
             localStorage.setItem('theme', theme);
@@ -303,7 +263,7 @@
         let currentStreams = [];
         let currentVideo = null;
 
-        if (!token) document.getElementById('authStatus').innerHTML = '<a href="/login.html" style="color:#6366f1;">Login to watch</a>';
+        if (!token) document.getElementById('authStatus').innerHTML = '<a href="/login.html" style="color:#3b82f6;">Login to watch</a>';
         else document.getElementById('authStatus').innerHTML = '<span style="color:#10b981;"><i class="fas fa-check-circle"></i> Ready</span>';
 
         function switchTab(tab) {
@@ -330,8 +290,8 @@
                     document.getElementById('matchesCount').innerText = matches.length;
                     document.getElementById('matchesGrid').innerHTML = matches.map(m => `
                         <div class="match-card" onclick="openStream('${m.id}', '${m.homeTeam} vs ${m.awayTeam}', ${JSON.stringify(m.streams).replace(/"/g, '&quot;')})">
-                            <div class="match-header"><span class="league">${m.league}</span><span class="status ${m.status.toLowerCase()}">${m.status}</span></div>
-                            <div class="match-body"><div class="team"><img src="${m.homeLogo}" class="team-logo" onerror="this.src='https://via.placeholder.com/60'"><div class="team-name">${m.homeTeam}</div></div><div class="score">${m.homeScore} - ${m.awayScore}</div><div class="team"><img src="${m.awayLogo}" class="team-logo" onerror="this.src='https://via.placeholder.com/60'"><div class="team-name">${m.awayTeam}</div></div></div>
+                            <div class="match-header"><span class="league">${m.league}</span><span class="status ${m.status.toLowerCase().replace(' ', '')}">${m.status}</span></div>
+                            <div class="match-body"><div class="team"><img src="${m.homeLogo}" class="team-logo" onerror="this.src='https://placehold.co/50x50?text=Logo'"><div class="team-name">${m.homeTeam}</div></div><div class="score">${m.homeScore} - ${m.awayScore}</div><div class="team"><img src="${m.awayLogo}" class="team-logo" onerror="this.src='https://placehold.co/50x50?text=Logo'"><div class="team-name">${m.awayTeam}</div></div></div>
                             <div class="match-footer"><button class="stream-btn"><i class="fas fa-play"></i> Watch Live</button></div>
                         </div>
                     `).join('');
@@ -344,7 +304,32 @@
                 const res = await fetch('/api/livescores');
                 const data = await res.json();
                 const matches = data.result?.matches || [];
-                document.getElementById('scoresTable').innerHTML = `</table><thead><tr><th>Home</th><th>Score</th><th>Away</th><th>League</th><th>Status</th></tr></thead><tbody>${matches.slice(0, 50).map(m => `<tr><td>${m.homeTeam}</td><td><strong>${m.homeScore} - ${m.awayScore}</strong></td><td>${m.awayTeam}</td><td>${m.league}</td><td>${m.status}</td></tr>`).join('')}</tbody></table>`;
+                document.getElementById('scoresCount').innerText = matches.length;
+                document.getElementById('scoresTable').innerHTML = `
+                    <table>
+                        <thead>
+                            <tr><th>Home</th><th>Score</th><th>Away</th><th>League</th><th>Status</th><th>Minute</th></tr>
+                        </thead>
+                        <tbody>
+                            ${matches.slice(0, 100).map(m => {
+                                let statusBadge = '';
+                                if (m.status === 'Live' || m.status === '1st Half' || m.status === '2nd Half') statusBadge = `<span class="live-badge"><i class="fas fa-circle" style="font-size: 8px; margin-right: 4px;"></i> LIVE</span>`;
+                                else if (m.status === 'Half Time') statusBadge = `<span class="halftime-badge">HT</span>`;
+                                else statusBadge = m.status;
+                                return `
+                                    <tr>
+                                        <td><strong>${m.homeTeam}</strong></td>
+                                        <td class="score-cell">${m.homeScore} - ${m.awayScore}</td>
+                                        <td><strong>${m.awayTeam}</strong></td>
+                                        <td>${m.league}</td>
+                                        <td>${statusBadge}</td>
+                                        <td>${m.minute ? m.minute + "'" : '-'}</td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                `;
             } catch(e) { document.getElementById('scoresTable').innerHTML = '<p>Failed to load scores</p>'; }
         }
 
@@ -356,17 +341,16 @@
                 document.getElementById('predictionsCount').innerText = predictions.length;
                 document.getElementById('predictionsGrid').innerHTML = predictions.map(p => `
                     <div class="prediction-card">
-                        <div class="match-header"><span class="league">${p.league}</span><span class="status">${p.time}</span></div>
-                        <h3 style="margin: 1rem 0;">${p.match}</h3>
+                        <div><span class="league">${p.league}</span> <span style="float:right; font-size:0.75rem;">${p.time}</span></div>
+                        <h3 style="margin: 0.8rem 0; font-size: 1rem;">${p.match}</h3>
                         <div class="prediction-stats">
-                            <div class="prediction-stat"><div class="prediction-value">${p.predictions?.fulltime?.home || 0}%</div><div>Home Win</div></div>
+                            <div class="prediction-stat"><div class="prediction-value">${p.predictions?.fulltime?.home || 0}%</div><div>Home</div></div>
                             <div class="prediction-stat"><div class="prediction-value">${p.predictions?.fulltime?.draw || 0}%</div><div>Draw</div></div>
-                            <div class="prediction-stat"><div class="prediction-value">${p.predictions?.fulltime?.away || 0}%</div><div>Away Win</div></div>
+                            <div class="prediction-stat"><div class="prediction-value">${p.predictions?.fulltime?.away || 0}%</div><div>Away</div></div>
                         </div>
                         <div class="prediction-stats">
                             <div class="prediction-stat"><div>Over 2.5</div><div class="prediction-value">${p.predictions?.over_2_5?.yes || 0}%</div></div>
-                            <div class="prediction-stat"><div>BTTS</div><div class="prediction-value">${p.predictions?.bothTeamToScore?.yes || 0}%</div></div>
-                            ${p.predictions?.value_bets ? `<div class="prediction-stat"><span class="value-bet">🔥 Value Bet</span></div>` : ''}
+                            <div class="prediction-stat"><div>Both Score</div><div class="prediction-value">${p.predictions?.bothTeamToScore?.yes || 0}%</div></div>
                         </div>
                     </div>
                 `).join('');
@@ -380,7 +364,7 @@
                 const items = data.result?.data?.items || [];
                 document.getElementById('newsGrid').innerHTML = items.map(n => `
                     <div class="news-card">
-                        <img src="${n.cover?.url || 'https://via.placeholder.com/400x200'}" class="news-image" onerror="this.src='https://via.placeholder.com/400x200'">
+                        <img src="${n.cover?.url || 'https://placehold.co/400x160?text=News'}" class="news-image" onerror="this.src='https://placehold.co/400x160?text=News'">
                         <div class="news-content">
                             <h4 class="news-title">${n.title}</h4>
                             <p class="news-summary">${n.summary}</p>
@@ -402,7 +386,7 @@
                 if (data.result && data.result.length) {
                     resultsDiv.innerHTML = data.result.map(p => `
                         <div class="player-card">
-                            <img src="${p.cutout || p.thumbnail || 'https://via.placeholder.com/70'}" class="player-avatar" onerror="this.src='https://via.placeholder.com/70'">
+                            <img src="${p.cutout || p.thumbnail || 'https://placehold.co/60x60?text=Player'}" class="player-avatar" onerror="this.src='https://placehold.co/60x60?text=Player'">
                             <div class="player-info">
                                 <div class="player-name">${p.name}</div>
                                 <div class="player-detail"><i class="fas fa-futbol"></i> ${p.team || 'N/A'}</div>
@@ -411,7 +395,7 @@
                             </div>
                         </div>
                     `).join('');
-                } else { resultsDiv.innerHTML = '<p>No players found</p>'; }
+                } else { resultsDiv.innerHTML = '<p style="text-align:center;">No players found</p>'; }
             } catch(e) { resultsDiv.innerHTML = '<p>Search failed</p>'; }
         }
 
@@ -426,7 +410,7 @@
                 if (data.result && data.result.length) {
                     resultsDiv.innerHTML = data.result.map(t => `
                         <div class="player-card">
-                            <img src="${t.thumbnail || 'https://via.placeholder.com/70'}" class="player-avatar" onerror="this.src='https://via.placeholder.com/70'">
+                            <img src="${t.thumbnail || 'https://placehold.co/60x60?text=Team'}" class="player-avatar" onerror="this.src='https://placehold.co/60x60?text=Team'">
                             <div class="player-info">
                                 <div class="player-name">${t.name}</div>
                                 <div class="player-detail"><i class="fas fa-trophy"></i> ${t.league || 'N/A'}</div>
@@ -434,7 +418,7 @@
                             </div>
                         </div>
                     `).join('');
-                } else { resultsDiv.innerHTML = '<p>No teams found</p>'; }
+                } else { resultsDiv.innerHTML = '<p style="text-align:center;">No teams found</p>'; }
             } catch(e) { resultsDiv.innerHTML = '<p>Search failed</p>'; }
         }
 
@@ -454,18 +438,24 @@
             const video = document.getElementById('videoPlayer');
             document.querySelectorAll('.stream-option').forEach((btn,i) => i===index ? btn.classList.add('active') : btn.classList.remove('active'));
             const url = stream.url;
+            console.log('Loading stream:', url);
+            
             if (url.includes('.m3u8')) {
                 if (Hls.isSupported()) {
                     if (currentVideo) currentVideo.destroy();
-                    currentVideo = new Hls();
+                    currentVideo = new Hls({ debug: false });
                     currentVideo.loadSource(url);
                     currentVideo.attachMedia(video);
-                    currentVideo.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+                    currentVideo.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(e => console.log('Autoplay prevented:', e)));
+                    currentVideo.on(Hls.Events.ERROR, (event, data) => console.log('HLS Error:', data));
                 } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                     video.src = url;
-                    video.addEventListener('loadedmetadata', () => video.play());
+                    video.addEventListener('loadedmetadata', () => video.play().catch(e => console.log('Autoplay prevented:', e)));
                 }
-            } else { video.src = url; video.play(); }
+            } else {
+                video.src = url;
+                video.play().catch(e => console.log('Autoplay prevented:', e));
+            }
         }
 
         function closeModal() {
@@ -476,7 +466,6 @@
             if (currentVideo) { currentVideo.destroy(); currentVideo = null; }
         }
 
-        // Load default
         loadMatches();
     </script>
 </body>
