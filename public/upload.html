@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload - DEVHUB</title>
+    
+    <script>
+        (function() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                fetch('/api/me', { headers: { 'Authorization': `Bearer ${token}` } })
+                    .then(res => res.json())
+                    .then(user => {
+                        if (user.role !== 'admin') {
+                            var s = document.createElement('script');
+                            s.src = 'https://pl29464105.effectivecpmnetwork.com/1b/a8/38/1ba838ed76bc22378f33cccb731d8356.js';
+                            document.head.appendChild(s);
+                        }
+                    })
+                    .catch(() => {});
+            } else {
+                var s = document.createElement('script');
+                s.src = 'https://pl29464105.effectivecpmnetwork.com/1b/a8/38/1ba838ed76bc22378f33cccb731d8356.js';
+                document.head.appendChild(s);
+            }
+        })();
+    </script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: rgba(5,5,8,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .back-btn { color: #94a3b8; text-decoration: none; }
+        .container { max-width: 800px; margin: 0 auto; padding: 2rem; }
+        .upload-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 24px;
+            padding: 2rem;
+            text-align: center;
+        }
+        .upload-icon { font-size: 4rem; color: #6366f1; margin-bottom: 1rem; }
+        h2 { margin-bottom: 0.5rem; }
+        .subtitle { color: #94a3b8; margin-bottom: 2rem; }
+        .drop-zone {
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .drop-zone:hover, .drop-zone.dragover { border-color: #6366f1; background: rgba(99,102,241,0.1); }
+        .file-input { display: none; }
+        .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+        }
+        .btn-primary { background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); }
+        .result-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        .loader { width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1); border-top-color: #6366f1; border-radius: 50%; animation: spin 1s linear infinite; margin: 1rem auto; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(0,0,0,0.9);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid #10b981;
+            animation: slideIn 0.3s ease;
+            z-index: 1000;
+        }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .footer { background: rgba(255,255,255,0.05); border-top: 1px solid rgba(255,255,255,0.1); padding: 2rem; text-align: center; margin-top: 4rem; }
+        @media (max-width: 768px) { .container { padding: 1rem; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+            <div class="logo">📁 Catbox Uploader</div>
+            <div id="authStatus"></div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="upload-card">
+            <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+            <h2>Upload Files to Catbox</h2>
+            <p class="subtitle">Up to 200MB • No expiry • Direct links</p>
+            
+            <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                <i class="fas fa-upload" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
+                <p>Click or drag & drop files here</p>
+                <small style="color: #94a3b8;">Images, videos, documents - any file type</small>
+            </div>
+            <input type="file" id="fileInput" class="file-input" onchange="uploadFile(this.files[0])">
+            
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>Made with <i class="fas fa-heart" style="color:#ec4899;"></i> by <strong>Dev Gift</strong> | +2349164624021</p>
+    </footer>
+
+    <script>
+        const token = localStorage.getItem('token');
+        if (!token) {
+            document.getElementById('authStatus').innerHTML = '<a href="/login.html" style="color:#6366f1;">Login to upload</a>';
+            document.getElementById('dropZone').style.opacity = '0.5';
+            document.getElementById('dropZone').style.pointerEvents = 'none';
+        } else {
+            document.getElementById('authStatus').innerHTML = '<span style="color:#10b981;"><i class="fas fa-check-circle"></i> Ready</span>';
+        }
+
+        // Drag & drop
+        const dropZone = document.getElementById('dropZone');
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) uploadFile(file);
+        });
+
+        async function uploadFile(file) {
+            if (!token) { showToast('Please login first', 'error'); return; }
+            if (!file) return;
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div class="loader"></div>';
+            
+            try {
+                const res = await fetch('/api/upload/catbox', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: formData
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="result-card">
+                            <h3><i class="fas fa-check-circle" style="color:#10b981;"></i> Upload Successful!</h3>
+                            <p><strong>Filename:</strong> ${data.filename}</p>
+                            <p><strong>Size:</strong> ${(data.size / 1024 / 1024).toFixed(2)} MB</p>
+                            <p><strong>URL:</strong> <a href="${data.url}" target="_blank" style="color:#6366f1;">${data.url}</a></p>
+                            <button class="btn btn-primary" onclick="navigator.clipboard.writeText('${data.url}')">Copy Link</button>
+                        </div>
+                    `;
+                    showToast('Upload successful!', 'success');
+                } else {
+                    resultDiv.innerHTML = `<div class="result-card"><p style="color:#ef4444;">Upload failed: ${data.error}</p></div>`;
+                    showToast('Upload failed', 'error');
+                }
+            } catch(e) {
+                resultDiv.innerHTML = `<div class="result-card"><p style="color:#ef4444;">Error: ${e.message}</p></div>`;
+            }
+        }
+
+        function showToast(msg, type) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+    </script>
+</body>
+</html>
