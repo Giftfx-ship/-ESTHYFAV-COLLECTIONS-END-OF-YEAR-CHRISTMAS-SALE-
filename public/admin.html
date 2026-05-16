@@ -4,28 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - DEVHUB</title>
-    
-    <!-- ADSTERRA POPUNDER -->
-   
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
-            color: #fff;
-            min-height: 100vh;
-        }
-        .navbar {
-            background: rgba(5,5,8,0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #0a0a0f, #1a1a2e); color: #fff; min-height: 100vh; }
+        .navbar { background: rgba(5,5,8,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 1rem 2rem; position: sticky; top: 0; z-index: 100; }
         .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
         .logo { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
@@ -47,17 +31,7 @@
         .btn-success { background: #10b981; color: white; }
         .loader { width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1); border-top-color: #6366f1; border-radius: 50%; animation: spin 1s linear infinite; margin: 2rem auto; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .toast {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: rgba(0,0,0,0.9);
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            border-left: 4px solid #10b981;
-            animation: slideIn 0.3s ease;
-            z-index: 1000;
-        }
+        .toast { position: fixed; bottom: 2rem; right: 2rem; background: rgba(0,0,0,0.9); padding: 1rem 1.5rem; border-radius: 12px; border-left: 4px solid #10b981; animation: slideIn 0.3s ease; z-index: 1000; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         .footer { background: rgba(255,255,255,0.05); border-top: 1px solid rgba(255,255,255,0.1); padding: 2rem; text-align: center; margin-top: 4rem; }
         @media (max-width: 768px) { .users-table { overflow-x: scroll; } }
@@ -73,113 +47,6 @@
 
     <div class="container">
         <h1 style="margin-bottom: 2rem;">Dashboard</h1>
-        
-        <div class="stats-grid" id="statsGrid">
-            <div class="stat-card"><h3>Total Users</h3><div class="number" id="totalUsers">-</div></div>
-            <div class="stat-card"><h3>New Today</h3><div class="number" id="newUsers">-</div></div>
-            <div class="stat-card"><h3>Total APIs</h3><div class="number">100+</div></div>
-        </div>
-
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Search users..." onkeyup="searchUsers()">
-        </div>
-
-        <div class="users-table">
-            <table>
-                <thead>
-                    <tr><th>Username</th><th>Email</th><th>Role</th><th>Joined</th><th>Last Login</th><th>Actions</th></tr>
-                </thead>
-                <tbody id="usersTableBody">
-                    <tr><td colspan="6"><div class="loader"></div></td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <footer class="footer">
-        <p>Made with <i class="fas fa-heart" style="color:#ec4899;"></i> by <strong>Dev Gift</strong> | +2349164624021</p>
-    </footer>
-
-    <script>
-        const token = localStorage.getItem('token');
-        let allUsers = [];
-
-        async function checkAuth() {
-            if (!token) { window.location.href = '/login.html'; return; }
-            try {
-                const res = await fetch('/api/me', { headers: { 'Authorization': `Bearer ${token}` } });
-                const user = await res.json();
-                if (user.role !== 'admin') { alert('Admin access required'); window.location.href = '/'; }
-                else { loadStats(); loadUsers(); }
-            } catch(e) { window.location.href = '/login.html'; }
-        }
-
-        async function loadStats() {
-            try {
-                const res = await fetch('/api/admin/stats', { headers: { 'Authorization': `Bearer ${token}` } });
-                const data = await res.json();
-                document.getElementById('totalUsers').innerText = data.totalUsers;
-                document.getElementById('newUsers').innerText = data.newUsersToday;
-            } catch(e) {}
-        }
-
-        async function loadUsers() {
-            try {
-                const res = await fetch('/api/admin/users', { headers: { 'Authorization': `Bearer ${token}` } });
-                const users = await res.json();
-                allUsers = users;
-                renderUsers(users);
-            } catch(e) { console.error(e); }
-        }
-
-        function renderUsers(users) {
-            const tbody = document.getElementById('usersTableBody');
-            if (!users.length) { tbody.innerHTML = '<tr><td colspan="6">No users found</td></tr>'; return; }
-            tbody.innerHTML = users.map(user => `
-                <tr>
-                    <td><i class="fas fa-user"></i> ${user.username}</td>
-                    <td>${user.email}</td>
-                    <td><span class="badge ${user.role === 'admin' ? 'badge-admin' : 'badge-user'}">${user.role}</span></td>
-                    <td>${new Date(user.createdAt).toLocaleDateString()}</td>
-                    <td>${user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : '-'}</td>
-                    <td>
-                        <button class="btn btn-danger" onclick="deleteUser('${user._id}')">Delete</button>
-                        ${user.role !== 'admin' ? `<button class="btn btn-success" onclick="makeAdmin('${user._id}')">Make Admin</button>` : ''}
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        function searchUsers() {
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = allUsers.filter(u => u.username.toLowerCase().includes(search) || u.email.toLowerCase().includes(search));
-            renderUsers(filtered);
-        }
-
-        async function deleteUser(id) {
-            if (confirm('Delete this user?')) {
-                await fetch(`/api/admin/users/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
-                showToast('User deleted', 'success');
-                loadUsers(); loadStats();
-            }
-        }
-
-        async function makeAdmin(id) {
-            await fetch(`/api/admin/users/${id}/make-admin`, { method: 'PUT', headers: { 'Authorization': `Bearer ${token}` } });
-            showToast('User is now admin', 'success');
-            loadUsers();
-        }
-
-        function logout() { localStorage.removeItem('token'); window.location.href = '/login.html'; }
-        function showToast(msg, type) {
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
-
-        checkAuth();
-    </script>
-</body>
-</html>
+        <div class="stats-grid"><div class="stat-card"><h3>Total Users</h3><div class="number" id="totalUsers">-</div></div><div class="stat-card"><h3>New Today</h3><div class="number" id="newUsers">-</div></div><div class="stat-card"><h3>Total APIs</h3><div class="number">50+</div></div></div>
+        <div class="search-box"><input type="text" id="searchInput" placeholder="Search users..." onkeyup="searchUsers()"></div>
+        <div class="users-table">\n<table>\n<thead>\n<tr><th>Username</th><th>Email</th><th>Role</th><th>Joined</th><th>Last Login</th><th>Actions</th></tr>\n</thead>\n<tbody id="usersTableBody"><tr><td colspan="6"><div class="loader"></div></td></tr></tbody>\n</table>\n</div>\n</div>\n\n<footer class="footer"><p>Made with <i class="fas fa-heart" style="color:#ec4899;"></i> by <strong>Dev Gift</strong> | +2349164624021</p></footer>\n\n<script>\nconst token = localStorage.getItem('token');\nlet allUsers = [];\n\nasync function checkAuth() {\n    if (!token) { window.location.href = '/login.html'; return; }\n    try {\n        const res = await fetch('/api/me', { headers: { 'Authorization': `Bearer ${token}` } });\n        const user = await res.json();\n        if (user.role !== 'admin') { alert('Admin access required'); window.location.href = '/'; }\n        else { loadStats(); loadUsers(); }\n    } catch(e) { window.location.href = '/login.html'; }\n}\n\nasync function loadStats() {\n    try {\n        const res = await fetch('/api/admin/stats', { headers: { 'Authorization': `Bearer ${token}` } });\n        const data = await res.json();\n        document.getElementById('totalUsers').innerText = data.totalUsers;\n        document.getElementById('newUsers').innerText = data.newUsersToday;\n    } catch(e) {}\n}\n\nasync function loadUsers() {\n    try {\n        const res = await fetch('/api/admin/users', { headers: { 'Authorization': `Bearer ${token}` } });\n        const users = await res.json();\n        allUsers = users;\n        renderUsers(users);\n    } catch(e) { console.error(e); }\n}\n\nfunction renderUsers(users) {\n    const tbody = document.getElementById('usersTableBody');\n    if (!users.length) { tbody.innerHTML = '<tr><td colspan="6">No users found</td></tr>'; return; }\n    tbody.innerHTML = users.map(user => `\n        <tr>\n            <td><i class="fas fa-user"></i> ${user.username}</td>\n            <td>${user.email}</td>\n            <td><span class="badge ${user.role === 'admin' ? 'badge-admin' : 'badge-user'}">${user.role}</span></td>\n            <td>${new Date(user.createdAt).toLocaleDateString()}</td>\n            <td>${user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : '-'}</td>\n            <td>\n                <button class="btn btn-danger" onclick="deleteUser('${user._id}')">Delete</button>\n                ${user.role !== 'admin' ? `<button class="btn btn-success" onclick="makeAdmin('${user._id}')">Make Admin</button>` : ''}\n            </td>\n        </tr>\n    `).join('');\n}\n\nfunction searchUsers() {\n    const search = document.getElementById('searchInput').value.toLowerCase();\n    const filtered = allUsers.filter(u => u.username.toLowerCase().includes(search) || u.email.toLowerCase().includes(search));\n    renderUsers(filtered);\n}\n\nasync function deleteUser(id) {\n    if (confirm('Delete this user?')) {\n        await fetch(`/api/admin/users/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });\n        showToast('User deleted', 'success');\n        loadUsers(); loadStats();\n    }\n}\n\nasync function makeAdmin(id) {\n    await fetch(`/api/admin/users/${id}/make-admin`, { method: 'PUT', headers: { 'Authorization': `Bearer ${token}` } });\n    showToast('User is now admin', 'success');\n    loadUsers();\n}\n\nfunction logout() { localStorage.removeItem('token'); window.location.href = '/login.html'; }\nfunction showToast(msg, type) { const t=document.createElement('div'); t.className='toast'; t.innerHTML=`<i class="fas ${type==='success'?'fa-check-circle':'fa-exclamation-circle'}"></i> ${msg}`; document.body.appendChild(t); setTimeout(()=>t.remove(),3000); }\ncheckAuth();\n</script>\n</body>\n</html>
