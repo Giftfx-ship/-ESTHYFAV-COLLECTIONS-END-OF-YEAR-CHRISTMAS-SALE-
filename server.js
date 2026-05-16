@@ -60,6 +60,7 @@ const User = mongoose.model('User', UserSchema);
 
 // ============ AUTH MIDDLEWARE ============
 const JWT_SECRET = 'devhub_secret_2026_mrdev_2349164624021';
+const ADMIN_ACCESS_KEY = 'devgift12';
 
 const authenticate = async (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
@@ -95,8 +96,19 @@ async function callAPI(endpoint, params = {}) {
     return response.json();
 }
 
+// ============ TEMP NUMBER PROVIDERS ============
+const TEMP_PROVIDERS = [
+    { name: 'receive-smss', numbers: '/tempnumber/receive-smss/numbers', inbox: '/tempnumber/receive-smss/inbox' },
+    { name: 'sms24', numbers: '/tempnumber/sms24/numbers', inbox: '/tempnumber/sms24/inbox' },
+    { name: 'receive-sms-online', numbers: '/tempnumber/receive-sms-online/numbers', inbox: '/tempnumber/receive-sms-online/inbox' },
+    { name: 'hs3x', numbers: '/tempnumber/hs3x/numbers', inbox: '/tempnumber/hs3x/inbox' },
+    { name: 'receivesms', numbers: '/tempnumber/receivesms/numbers', inbox: '/tempnumber/receivesms/inbox' },
+    { name: 'smstome', numbers: '/tempnumber/smstome/numbers', inbox: '/tempnumber/smstome/inbox' }
+];
+
 // ============ AUTH ROUTES ============
 
+// Regular user registration
 app.post('/api/register', async (req, res) => {
     try {
         const { username, email, password } = req.body;
@@ -113,17 +125,48 @@ app.post('/api/register', async (req, res) => {
         }
         
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = new User({ username, email, password: hashedPassword });
+        const user = new User({ username, email, password: hashedPassword, role: 'user' });
         await user.save();
         
-        const token = jwt.sign({ id: user._id, username: user.username, role: user.role }, JWT_SECRET, { expiresIn: '30d' });
+        const token = jwt.sign({ id: user._id, username: user.username, role: 'user' }, JWT_SECRET, { expiresIn: '30d' });
         
-        res.json({ success: true, token, user: { id: user._id, username: user.username, email: user.email, role: user.role } });
+        res.json({ success: true, token, user: { id: user._id, username: user.username, email: user.email, role: 'user' } });
     } catch (error) {
         res.status(500).json({ error: 'Server error' });
     }
 });
 
+// Admin registration (requires access key: devgift12)
+app.post('/api/admin/register', async (req, res) => {
+    try {
+        const { username, email, password, accessKey } = req.body;
+        
+        if (accessKey !== ADMIN_ACCESS_KEY) {
+            return res.status(403).json({ error: 'Invalid admin access key' });
+        }
+        
+        if (!username || !email || !password) {
+            return res.status(400).json({ error: 'All fields required' });
+        }
+        
+        const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+        if (existingUser) {
+            return res.status(400).json({ error: 'User already exists' });
+        }
+        
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = new User({ username, email, password: hashedPassword, role: 'admin' });
+        await user.save();
+        
+        const token = jwt.sign({ id: user._id, username: user.username, role: 'admin' }, JWT_SECRET, { expiresIn: '30d' });
+        
+        res.json({ success: true, token, user: { id: user._id, username: user.username, email: user.email, role: 'admin' } });
+    } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// Login
 app.post('/api/login', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -148,6 +191,7 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+// Get current user
 app.get('/api/me', authenticate, async (req, res) => {
     try {
         const user = await User.findById(req.userId).select('-password');
@@ -157,6 +201,7 @@ app.get('/api/me', authenticate, async (req, res) => {
     }
 });
 
+// Update profile
 app.put('/api/profile', authenticate, async (req, res) => {
     try {
         const { username, bio, avatar, phone, location } = req.body;
@@ -173,6 +218,7 @@ app.put('/api/profile', authenticate, async (req, res) => {
     }
 });
 
+// Change password
 app.put('/api/change-password', authenticate, async (req, res) => {
     try {
         const { currentPassword, newPassword } = req.body;
@@ -189,6 +235,7 @@ app.put('/api/change-password', authenticate, async (req, res) => {
     }
 });
 
+// Favorites
 app.post('/api/favorites', authenticate, async (req, res) => {
     try {
         const { matchId } = req.body;
@@ -215,6 +262,7 @@ app.delete('/api/favorites/:matchId', authenticate, async (req, res) => {
     }
 });
 
+// Watch history
 app.post('/api/watch-history', authenticate, async (req, res) => {
     try {
         const { matchId, matchTitle } = req.body;
@@ -322,16 +370,7 @@ app.get('/api/search/team', async (req, res) => {
     }
 });
 
-// ============ TEMP NUMBER SYSTEM ============
-
-const TEMP_PROVIDERS = [
-    { name: 'receive-smss', numbers: '/tempnumber/receive-smss/numbers', inbox: '/tempnumber/receive-smss/inbox' },
-    { name: 'sms24', numbers: '/tempnumber/sms24/numbers', inbox: '/tempnumber/sms24/inbox' },
-    { name: 'receive-sms-online', numbers: '/tempnumber/receive-sms-online/numbers', inbox: '/tempnumber/receive-sms-online/inbox' },
-    { name: 'hs3x', numbers: '/tempnumber/hs3x/numbers', inbox: '/tempnumber/hs3x/inbox' },
-    { name: 'receivesms', numbers: '/tempnumber/receivesms/numbers', inbox: '/tempnumber/receivesms/inbox' },
-    { name: 'smstome', numbers: '/tempnumber/smstome/numbers', inbox: '/tempnumber/smstome/inbox' }
-];
+// ============ TEMP NUMBER ROUTES ============
 
 app.get('/api/temp-numbers', authenticate, async (req, res) => {
     try {
@@ -366,7 +405,7 @@ app.get('/api/temp-inbox', authenticate, async (req, res) => {
     }
 });
 
-// ============ MEDIA DOWNLOADER ============
+// ============ MEDIA DOWNLOADER ROUTES ============
 
 app.get('/api/download/youtube', authenticate, async (req, res) => {
     try {
@@ -473,7 +512,7 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`\n🚀 SERVER RUNNING: http://localhost:${PORT}`);
-    console.log(`📱 API Key: ${API_KEY}`);
-    console.log(`✅ MongoDB: Connected\n`);
+    console.log(`\n🚀 SERVER: http://localhost:${PORT}`);
+    console.log(`🔑 Admin Access Key: devgift12`);
+    console.log(`✅ MongoDB Connected\n`);
 });
