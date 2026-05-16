@@ -3,283 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DEVHUB | Live Football Streaming</title>
+    <title>Login - DEVHUB</title>
+    
+    <!-- ADSTERRA POPUNDER -->
+    <script src="https://pl29464105.effectivecpmnetwork.com/1b/a8/38/1ba838ed76bc22378f33cccb731d8356.js"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --primary: #6366f1; --primary-dark: #4f46e5; --secondary: #ec4899;
-            --dark: #0a0a0f; --darker: #050508; --glass: rgba(255,255,255,0.05);
-            --glass-border: rgba(255,255,255,0.1); --success: #10b981;
-            --danger: #ef4444; --text: #e2e8f0; --text-muted: #94a3b8;
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
         }
-        body { font-family: 'Inter', sans-serif; background: var(--darker); color: var(--text); }
-        .bg-animation {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background: radial-gradient(circle at 20% 50%, rgba(99,102,241,0.15) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(236,72,153,0.1) 0%, transparent 50%);
+        .login-container {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 32px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 450px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        .navbar {
-            position: fixed; top: 0; left: 0; right: 0;
-            background: rgba(5,5,8,0.95); backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--glass-border); z-index: 1000; padding: 1rem 2rem;
-        }
-        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; text-decoration: none; }
-        .logo small { font-size: 0.8rem; color: var(--text-muted); }
-        .nav-links { display: flex; gap: 2rem; align-items: center; }
-        .nav-links a { color: var(--text-muted); text-decoration: none; transition: all 0.3s; font-weight: 500; }
-        .nav-links a:hover, .nav-links a.active { color: var(--primary); }
-        .btn { padding: 0.6rem 1.5rem; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s; border: none; font-size: 0.9rem; }
-        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(99,102,241,0.4); }
-        .btn-outline { background: transparent; border: 1px solid var(--glass-border); color: var(--text); }
-        .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
-        .container { max-width: 1400px; margin: 0 auto; padding: 6rem 2rem 2rem; }
-        .hero { text-align: center; padding: 3rem 0; }
-        .hero h1 { font-size: 3.5rem; font-weight: 800; background: linear-gradient(135deg, #fff, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .hero p { color: var(--text-muted); margin-top: 1rem; }
-        .stats-bar { display: flex; justify-content: center; gap: 2rem; margin: 2rem 0; flex-wrap: wrap; }
-        .stat-card { text-align: center; padding: 1.5rem; background: var(--glass); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid var(--glass-border); min-width: 150px; }
-        .stat-number { font-size: 2rem; font-weight: 800; color: var(--primary); }
-        .stat-label { color: var(--text-muted); margin-top: 0.5rem; }
-        .section-title { font-size: 1.8rem; font-weight: 700; margin: 2rem 0 1.5rem; display: flex; align-items: center; gap: 1rem; }
-        .section-title i { color: var(--primary); }
-        .matches-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem; }
-        .match-card { background: var(--glass); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid var(--glass-border); overflow: hidden; transition: all 0.3s; cursor: pointer; }
-        .match-card:hover { transform: translateY(-5px); border-color: var(--primary); }
-        .match-header { padding: 1rem; background: rgba(0,0,0,0.3); display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); }
-        .league { font-size: 0.8rem; color: var(--primary); font-weight: 600; }
-        .status { font-size: 0.8rem; padding: 0.25rem 0.75rem; border-radius: 20px; background: var(--success); color: white; }
-        .status.finished { background: var(--text-muted); }
-        .match-body { padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
-        .team { flex: 1; text-align: center; }
-        .team-logo { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-bottom: 0.5rem; }
-        .team-name { font-weight: 600; font-size: 0.9rem; }
-        .score { font-size: 1.8rem; font-weight: 800; color: var(--primary); }
-        .match-footer { padding: 1rem; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; }
-        .stream-btn { background: var(--primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 10px; cursor: pointer; }
-        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; }
-        .modal.active { display: flex; }
-        .modal-content { width: 90%; max-width: 1000px; background: var(--darker); border-radius: 24px; border: 1px solid var(--glass-border); overflow: hidden; }
-        .modal-header { padding: 1rem; background: var(--glass); display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); }
-        .modal-body { padding: 1rem; }
-        .video-container { position: relative; padding-bottom: 56.25%; height: 0; }
-        .video-container video, .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        .stream-select { margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
-        .stream-option { padding: 0.5rem 1rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 10px; cursor: pointer; }
-        .stream-option.active { background: var(--primary); }
-        .close-modal { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
-        .loader { width: 50px; height: 50px; border: 3px solid var(--glass-border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 2rem auto; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .footer { background: var(--glass); border-top: 1px solid var(--glass-border); padding: 2rem; margin-top: 4rem; text-align: center; }
-        .footer a { color: var(--primary); text-decoration: none; }
-        .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--glass); backdrop-filter: blur(10px); padding: 1rem 1.5rem; border-radius: 12px; border-left: 4px solid var(--primary); z-index: 1500; animation: slideIn 0.3s ease; }
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @media (max-width: 768px) { .hero h1 { font-size: 2rem; } .nav-links { display: none; } .matches-grid { grid-template-columns: 1fr; } }
+        .logo { text-align: center; font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 2rem; }
+        h2 { text-align: center; margin-bottom: 2rem; color: white; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: block; margin-bottom: 0.5rem; color: #94a3b8; }
+        .input-group input { width: 100%; padding: 1rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; font-size: 1rem; }
+        .input-group input:focus { outline: none; border-color: #6366f1; }
+        .btn { width: 100%; padding: 1rem; background: linear-gradient(135deg, #6366f1, #4f46e5); border: none; border-radius: 12px; color: white; font-size: 1rem; font-weight: 600; cursor: pointer; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(99,102,241,0.4); }
+        .register-link { text-align: center; margin-top: 1.5rem; color: #94a3b8; }
+        .register-link a { color: #6366f1; text-decoration: none; }
+        .error { background: rgba(239,68,68,0.2); border: 1px solid #ef4444; padding: 0.75rem; border-radius: 8px; color: #ef4444; margin-bottom: 1rem; text-align: center; display: none; }
     </style>
 </head>
 <body>
-    <div class="bg-animation"></div>
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="/" class="logo">DEVHUB <small>by Dev Gift</small></a>
-            <div class="nav-links">
-                <a href="/" class="active">Home</a>
-                <a href="#" onclick="showTools()">Tools</a>
-                <a href="#" onclick="showTempNumbers()">Temp Numbers</a>
-                <a href="#" onclick="window.location.href='/dashboard.html'">Dashboard</a>
-                <a href="#" onclick="window.location.href='/profile.html'">Profile</a>
-            </div>
-            <div class="auth-buttons" id="authButtons">
-                <button class="btn btn-outline" onclick="window.location.href='/login.html'">Login</button>
-                <button class="btn btn-primary" onclick="window.location.href='/register.html'">Sign Up</button>
-            </div>
-            <div class="user-menu" id="userMenu" style="display: none;">
-                <span id="usernameDisplay" style="margin-right: 1rem;"></span>
-                <button class="btn btn-outline" onclick="logout()">Logout</button>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container">
-        <div class="hero">
-            <h1>Live Football Streaming</h1>
-            <p>Watch live matches, get real-time scores, and download media - All in one place</p>
-        </div>
-        <div class="stats-bar">
-            <div class="stat-card"><div class="stat-number" id="matchesCount">0</div><div class="stat-label">Live Matches</div></div>
-            <div class="stat-card"><div class="stat-number" id="usersCount">0</div><div class="stat-label">Active Users</div></div>
-            <div class="stat-card"><div class="stat-number">15+</div><div class="stat-label">Free Tools</div></div>
-        </div>
-
-        <div id="matchesSection">
-            <div class="section-title"><i class="fas fa-futbol"></i><h2>Live Matches</h2></div>
-            <div id="matchesGrid" class="matches-grid"><div class="loader"></div></div>
-        </div>
-
-        <div id="toolsSection" style="display: none;">
-            <div class="section-title"><i class="fas fa-tools"></i><h2>Powerful Tools</h2></div>
-            <div class="matches-grid">
-                <div class="match-card" onclick="openTool('youtube')"><div class="match-header"><span>YouTube Downloader</span><i class="fab fa-youtube"></i></div><div class="match-body" style="flex-direction:column; text-align:center;"><i class="fab fa-youtube" style="font-size:3rem; color:#ff0000;"></i><h3>YouTube Downloader</h3><p style="color:var(--text-muted)">Download videos & audio</p></div></div>
-                <div class="match-card" onclick="openTool('instagram')"><div class="match-header"><span>Instagram Downloader</span><i class="fab fa-instagram"></i></div><div class="match-body" style="flex-direction:column; text-align:center;"><i class="fab fa-instagram" style="font-size:3rem; color:#e4405f;"></i><h3>Instagram Downloader</h3><p style="color:var(--text-muted)">Download reels & videos</p></div></div>
-                <div class="match-card" onclick="openTool('tiktok')"><div class="match-header"><span>TikTok Downloader</span><i class="fab fa-tiktok"></i></div><div class="match-body" style="flex-direction:column; text-align:center;"><i class="fab fa-tiktok" style="font-size:3rem;"></i><h3>TikTok Downloader</h3><p style="color:var(--text-muted)">No watermark</p></div></div>
-                <div class="match-card" onclick="openTool('qr')"><div class="match-header"><span>QR Generator</span><i class="fas fa-qrcode"></i></div><div class="match-body" style="flex-direction:column; text-align:center;"><i class="fas fa-qrcode" style="font-size:3rem; color:var(--primary);"></i><h3>QR Code Generator</h3><p style="color:var(--text-muted)">Generate QR codes</p></div></div>
-                <div class="match-card" onclick="openTool('shorten')"><div class="match-header"><span>URL Shortener</span><i class="fas fa-link"></i></div><div class="match-body" style="flex-direction:column; text-align:center;"><i class="fas fa-link" style="font-size:3rem; color:var(--primary);"></i><h3>URL Shortener</h3><p style="color:var(--text-muted)">Shorten long URLs</p></div></div>
-            </div>
-        </div>
-
-        <div id="tempNumbersSection" style="display: none;">
-            <div class="section-title"><i class="fas fa-phone-alt"></i><h2>Temporary Phone Numbers</h2></div>
-            <div class="matches-grid"><div class="match-card" style="grid-column:1/-1;"><div class="match-header"><span>Free Virtual Numbers</span><i class="fas fa-shield-alt"></i></div><div class="match-body" style="flex-direction:column;"><button class="btn btn-primary" onclick="loadTempNumbers()" style="margin-bottom:1rem;"><i class="fas fa-sync-alt"></i> Get Available Numbers</button><div id="tempNumbersList"></div></div></div></div>
-        </div>
+    <div class="login-container">
+        <div class="logo">DEVHUB</div>
+        <h2>Welcome Back</h2>
+        <div id="errorMsg" class="error"></div>
+        <form onsubmit="login(event)">
+            <div class="input-group"><label>Email</label><input type="email" id="email" required placeholder="Enter your email"></div>
+            <div class="input-group"><label>Password</label><input type="password" id="password" required placeholder="Enter your password"></div>
+            <button type="submit" class="btn">Login</button>
+        </form>
+        <div class="register-link">Don't have an account? <a href="/register.html">Sign up</a></div>
     </div>
-
-    <div id="streamModal" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="modalTitle">Live Stream</h3><button class="close-modal" onclick="closeModal()">&times;</button></div><div class="modal-body"><div class="video-container"><video id="videoPlayer" controls></video></div><div id="streamOptions" class="stream-select"></div></div></div></div>
-    <div id="toolModal" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="toolModalTitle">Tool</h3><button class="close-modal" onclick="closeToolModal()">&times;</button></div><div class="modal-body"><div id="toolContent"></div></div></div></div>
-
-    <footer class="footer"><p>Made with <i class="fas fa-heart" style="color:#ec4899;"></i> by <strong>Dev Gift</strong> | +2349164624021</p><p style="margin-top:0.5rem;">© 2026 DEVHUB - All rights reserved</p></footer>
-
     <script>
-        const API_URL = ''; let token = localStorage.getItem('token'); let currentStreams = []; let currentVideo = null;
-
-        function checkAuth() {
-            if (token) {
-                document.getElementById('authButtons').style.display = 'none';
-                document.getElementById('userMenu').style.display = 'flex';
-                fetchUser();
-            }
-        }
-
-        async function fetchUser() {
+        async function login(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
             try {
-                const res = await fetch('/api/me', { headers: { 'Authorization': `Bearer ${token}` } });
-                const user = await res.json();
-                if (user.username) document.getElementById('usernameDisplay').innerHTML = `<i class="fas fa-user"></i> ${user.username}`;
-            } catch(e) {}
+                const res = await fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
+                const data = await res.json();
+                if (data.success) { localStorage.setItem('token', data.token); window.location.href = '/'; }
+                else { document.getElementById('errorMsg').style.display = 'block'; document.getElementById('errorMsg').textContent = data.error || 'Login failed'; }
+            } catch (error) { document.getElementById('errorMsg').style.display = 'block'; document.getElementById('errorMsg').textContent = 'Network error'; }
         }
-
-        function logout() { localStorage.removeItem('token'); window.location.reload(); }
-
-        async function loadMatches() {
-            try {
-                const res = await fetch('/api/matches'); const data = await res.json();
-                if (data.success && data.result) {
-                    const matches = data.result.matches;
-                    document.getElementById('matchesCount').innerText = matches.length;
-                    document.getElementById('matchesGrid').innerHTML = matches.map(m => `
-                        <div class="match-card" onclick="openStream('${m.id}', '${m.homeTeam} vs ${m.awayTeam}', ${JSON.stringify(m.streams).replace(/"/g, '&quot;')})">
-                            <div class="match-header"><span class="league">${m.league}</span><span class="status ${m.status.toLowerCase()}">${m.status}</span></div>
-                            <div class="match-body"><div class="team"><img src="${m.homeLogo}" class="team-logo" onerror="this.src='https://via.placeholder.com/60'"><div class="team-name">${m.homeTeam}</div></div><div class="score">${m.homeScore} - ${m.awayScore}</div><div class="team"><img src="${m.awayLogo}" class="team-logo" onerror="this.src='https://via.placeholder.com/60'"><div class="team-name">${m.awayTeam}</div></div></div>
-                            <div class="match-footer"><span><i class="far fa-clock"></i> ${new Date(m.startTime).toLocaleTimeString()}</span><button class="stream-btn" onclick="event.stopPropagation(); openStream('${m.id}', '${m.homeTeam} vs ${m.awayTeam}', ${JSON.stringify(m.streams).replace(/"/g, '&quot;')})"><i class="fas fa-play"></i> Watch</button></div>
-                        </div>
-                    `).join('');
-                }
-            } catch(e) { document.getElementById('matchesGrid').innerHTML = '<p style="text-align:center;">Failed to load matches</p>'; }
-        }
-
-        function openStream(id, title, streams) {
-            currentStreams = streams;
-            document.getElementById('modalTitle').innerHTML = title;
-            document.getElementById('streamOptions').innerHTML = streams.map((s,i) => `<button class="stream-option ${i===0?'active':''}" onclick="loadStream(${i})">${s.title}</button>`).join('');
-            document.getElementById('streamModal').classList.add('active');
-            loadStream(0);
-            fetch('/api/watch-history', { method:'POST', headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`}, body:JSON.stringify({matchId:id, matchTitle:title}) }).catch(e=>{});
-        }
-
-        function loadStream(index) {
-            const stream = currentStreams[index]; const video = document.getElementById('videoPlayer');
-            document.querySelectorAll('.stream-option').forEach((btn,i)=>{ if(i===index) btn.classList.add('active'); else btn.classList.remove('active'); });
-            const url = stream.url;
-            if(url.includes('.m3u8')) {
-                if(Hls.isSupported()) { if(currentVideo) currentVideo.destroy(); currentVideo = new Hls(); currentVideo.loadSource(url); currentVideo.attachMedia(video); currentVideo.on(Hls.Events.MANIFEST_PARSED,()=>video.play()); }
-                else if(video.canPlayType('application/vnd.apple.mpegurl')) { video.src = url; video.addEventListener('loadedmetadata',()=>video.play()); }
-            } else { video.src = url; video.play(); }
-        }
-
-        function closeModal() { document.getElementById('streamModal').classList.remove('active'); const video = document.getElementById('videoPlayer'); video.pause(); video.src = ''; if(currentVideo) { currentVideo.destroy(); currentVideo = null; } }
-        function closeToolModal() { document.getElementById('toolModal').classList.remove('active'); }
-        function showTools() { document.getElementById('matchesSection').style.display = 'none'; document.getElementById('toolsSection').style.display = 'block'; document.getElementById('tempNumbersSection').style.display = 'none'; }
-        function showTempNumbers() { document.getElementById('matchesSection').style.display = 'none'; document.getElementById('toolsSection').style.display = 'none'; document.getElementById('tempNumbersSection').style.display = 'block'; loadTempNumbers(); }
-
-        function openTool(tool) {
-            const modal = document.getElementById('toolModal'); const title = document.getElementById('toolModalTitle'); const content = document.getElementById('toolContent');
-            if(tool === 'youtube') {
-                title.innerHTML = '<i class="fab fa-youtube"></i> YouTube Downloader';
-                content.innerHTML = `<div><input type="text" id="youtubeUrl" placeholder="Enter YouTube URL..." style="width:100%; padding:1rem; background:var(--glass); border:1px solid var(--glass-border); border-radius:12px; color:white; margin-bottom:1rem;"><div style="display:flex; gap:1rem;"><button class="btn btn-primary" onclick="downloadMedia('youtube','video')">Download MP4</button><button class="btn btn-primary" onclick="downloadMedia('youtube','audio')">Download MP3</button></div><div id="downloadResult" style="margin-top:1rem;"></div></div>`;
-            } else if(tool === 'instagram') {
-                title.innerHTML = '<i class="fab fa-instagram"></i> Instagram Downloader';
-                content.innerHTML = `<div><input type="text" id="instaUrl" placeholder="Enter Instagram URL..." style="width:100%; padding:1rem; background:var(--glass); border:1px solid var(--glass-border); border-radius:12px; color:white; margin-bottom:1rem;"><button class="btn btn-primary" onclick="downloadMedia('instagram')">Download</button><div id="downloadResult" style="margin-top:1rem;"></div></div>`;
-            } else if(tool === 'tiktok') {
-                title.innerHTML = '<i class="fab fa-tiktok"></i> TikTok Downloader';
-                content.innerHTML = `<div><input type="text" id="tiktokUrl" placeholder="Enter TikTok URL..." style="width:100%; padding:1rem; background:var(--glass); border:1px solid var(--glass-border); border-radius:12px; color:white; margin-bottom:1rem;"><button class="btn btn-primary" onclick="downloadMedia('tiktok')">Download</button><div id="downloadResult" style="margin-top:1rem;"></div></div>`;
-            } else if(tool === 'qr') {
-                title.innerHTML = '<i class="fas fa-qrcode"></i> QR Code Generator';
-                content.innerHTML = `<div><input type="text" id="qrText" placeholder="Enter text or URL..." style="width:100%; padding:1rem; background:var(--glass); border:1px solid var(--glass-border); border-radius:12px; color:white; margin-bottom:1rem;"><button class="btn btn-primary" onclick="generateQR()">Generate QR Code</button><div id="qrResult" style="margin-top:1rem; text-align:center;"></div></div>`;
-            } else if(tool === 'shorten') {
-                title.innerHTML = '<i class="fas fa-link"></i> URL Shortener';
-                content.innerHTML = `<div><input type="text" id="longUrl" placeholder="Enter long URL..." style="width:100%; padding:1rem; background:var(--glass); border:1px solid var(--glass-border); border-radius:12px; color:white; margin-bottom:1rem;"><button class="btn btn-primary" onclick="shortenURL()">Shorten URL</button><div id="shortenResult" style="margin-top:1rem;"></div></div>`;
-            }
-            modal.classList.add('active');
-        }
-
-        async function downloadMedia(platform, type='video') {
-            const url = document.getElementById(`${platform}Url`).value; const resultDiv = document.getElementById('downloadResult');
-            if(!url) { showToast('Please enter a URL','error'); return; }
-            resultDiv.innerHTML = '<div class="loader"></div>';
-            try {
-                let endpoint = platform === 'youtube' ? `/api/download/youtube?url=${encodeURIComponent(url)}&type=${type}` : `/api/download/${platform}?url=${encodeURIComponent(url)}`;
-                const res = await fetch(endpoint, { headers: { 'Authorization': `Bearer ${token}` } }); const data = await res.json();
-                if(data.success && data.result) resultDiv.innerHTML = `<div style="background:var(--success); padding:1rem; border-radius:12px;"><a href="${data.result.url}" download style="color:white;">Click here to download</a></div>`;
-                else resultDiv.innerHTML = `<div style="color:var(--danger);">Download failed</div>`;
-            } catch(e) { resultDiv.innerHTML = `<div style="color:var(--danger);">Error: ${e.message}</div>`; }
-        }
-
-        async function generateQR() {
-            const text = document.getElementById('qrText').value; const resultDiv = document.getElementById('qrResult');
-            if(!text) { showToast('Please enter text','error'); return; }
-            resultDiv.innerHTML = '<div class="loader"></div>';
-            try {
-                const res = await fetch(`/api/qr?text=${encodeURIComponent(text)}`); const blob = await res.blob(); const url = URL.createObjectURL(blob);
-                resultDiv.innerHTML = `<img src="${url}" style="max-width:200px; margin:1rem auto; display:block;"><a href="${url}" download="qrcode.png" class="btn btn-primary">Download QR Code</a>`;
-            } catch(e) { resultDiv.innerHTML = `<div style="color:var(--danger);">Failed to generate QR</div>`; }
-        }
-
-        async function shortenURL() {
-            const url = document.getElementById('longUrl').value; const resultDiv = document.getElementById('shortenResult');
-            if(!url) { showToast('Please enter URL','error'); return; }
-            resultDiv.innerHTML = '<div class="loader"></div>';
-            try {
-                const res = await fetch(`/api/shorten?url=${encodeURIComponent(url)}`, { headers: { 'Authorization': `Bearer ${token}` } }); const data = await res.json();
-                if(data.shortUrl) resultDiv.innerHTML = `<div style="background:var(--success); padding:1rem; border-radius:12px;"><p>Shortened URL:</p><a href="${data.shortUrl}" target="_blank" style="color:white;">${data.shortUrl}</a><button class="btn btn-outline" onclick="navigator.clipboard.writeText('${data.shortUrl}')" style="margin-top:0.5rem;">Copy</button></div>`;
-                else resultDiv.innerHTML = `<div style="color:var(--danger);">Failed to shorten</div>`;
-            } catch(e) { resultDiv.innerHTML = `<div style="color:var(--danger);">Error: ${e.message}</div>`; }
-        }
-
-        async function loadTempNumbers() {
-            const listDiv = document.getElementById('tempNumbersList'); listDiv.innerHTML = '<div class="loader"></div>';
-            try {
-                const res = await fetch('/api/temp-numbers', { headers: { 'Authorization': `Bearer ${token}` } }); const data = await res.json();
-                if(data.numbers && data.numbers.length) listDiv.innerHTML = `<div style="display:flex; flex-direction:column; gap:1rem;">${data.numbers.map(n => `<div style="background:var(--glass); padding:1rem; border-radius:12px;"><h3>${n.number}</h3><p>Provider: ${n.provider}</p><button class="btn btn-outline" onclick="copyToClipboard('${n.number}')">Copy Number</button> <button class="btn btn-primary" onclick="checkInbox('${n.number}','${n.provider}')">Check Inbox</button></div>`).join('')}</div>`;
-                else listDiv.innerHTML = '<p>No numbers available</p>';
-            } catch(e) { listDiv.innerHTML = '<p style="color:var(--danger);">Failed to load numbers</p>'; }
-        }
-
-        async function checkInbox(number, provider) {
-            const listDiv = document.getElementById('tempNumbersList'); listDiv.innerHTML = '<div class="loader"></div>';
-            try {
-                const res = await fetch(`/api/temp-inbox?number=${encodeURIComponent(number)}&provider=${provider}`, { headers: { 'Authorization': `Bearer ${token}` } }); const data = await res.json();
-                if(data.messages && data.messages.length) listDiv.innerHTML = `<div><h3>Inbox for ${number}</h3>${data.messages.map(m => `<div style="background:var(--glass); padding:1rem; margin:0.5rem 0; border-radius:12px;"><p><strong>From:</strong> ${m.from || 'Unknown'}</p><p><strong>Message:</strong> ${m.message || m.text || m.body}</p><small>${m.time || new Date().toLocaleString()}</small></div>`).join('')}<button class="btn btn-outline" onclick="loadTempNumbers()">Back to Numbers</button></div>`;
-                else listDiv.innerHTML = `<div><p>No messages for ${number}</p><button class="btn btn-outline" onclick="loadTempNumbers()">Back</button></div>`;
-            } catch(e) { listDiv.innerHTML = `<div style="color:var(--danger);">Failed to load inbox</div>`; }
-        }
-
-        function copyToClipboard(text) { navigator.clipboard.writeText(text); showToast('Copied!'); }
-        function showToast(msg) { const t=document.createElement('div'); t.className='toast'; t.innerHTML=`<i class="fas fa-check-circle"></i> ${msg}`; document.body.appendChild(t); setTimeout(()=>t.remove(),3000); }
-
-        checkAuth(); loadMatches();
     </script>
 </body>
 </html>
